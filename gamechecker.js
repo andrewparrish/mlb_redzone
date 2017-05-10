@@ -35,4 +35,4 @@ function getData() {
   });
 }
 
-setInterval(function() { getData(); }, 10000);
+//setInterval(function() { getData(); }, 10000);
