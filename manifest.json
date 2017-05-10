@@ -9,7 +9,8 @@
   },
   "permissions": [
     "activeTab",
-    "http://lwsa.mlb.com/*"
+    "http://lwsa.mlb.com/*",
+    "storage"
   ],
 	"background":{
 		"scripts":["jquery-3.2.1.min.js", "gamechecker.js"],
