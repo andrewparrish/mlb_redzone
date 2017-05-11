@@ -46,6 +46,7 @@ function updatePriorityList() {
     $('#priority-list').empty();
     chrome.storage.sync.get('priorities', function(result) {
         var list = result.priorities || {};
+        console.log(list);
         if (list.toString() === {}.toString()) { return }
         list.each((function(item) {
             $('#priority-list').append(listItemForPriority(item));
@@ -53,20 +54,30 @@ function updatePriorityList() {
     });
 }
 
+function buildTeamPriority() {
+    var select = $('#add-team-select');
+    return {
+        val: select.val(),
+        text: select.text(),
+        priority: $('#add-team-priority').val(),
+        type: 'team'
+    }
+}
+
+function saveTeam() {
+    chrome.storage.sync.get('priorities', function(list) {
+        var priorityList = list;
+        if (priorityList.toString() === {}.toString()) { priorityList = [] }
+        var updatedList = addPriority(priorityList, buildTeamPriority());
+
+        chrome.storage.sync.set({'priorities': updatedList }, updatePriorityList);
+    });
+}
+
 $(document).ready(function() {
     addTeamsToSelect('#add-team-select');
     addPriorityToSelect('#add-team-priority');
     updatePriorityList();
-
-    var saveTeam = function() {
-        chrome.storage.sync.get('priorities', function(list) {
-            var priorityList = list;
-            if (priorityList.toString() === {}.toString()) { priorityList = [] }
-            var updatedList = addPriority(priorityList, /* ADD PRIORITY HERE*/);
-
-            chrome.storage.sync.set({'priorities': updatedList }, updatePriorityList);
-        });
-    };
 
     $("#add-team-button").click(saveTeam);
 });
