@@ -15,9 +15,11 @@ function toTwoDigit(str) {
   return str;
 }
 
+// http://lwsa.mlb.com/tfs/tfs?file=/components/game/mlb/year_2017/month_05/day_14/gid_2017_05_14_atlmlb_miamlb_1/plays.xml&timecode=20170514_182100
+
 function getData() {
   var xhr = new XMLHttpRequest();
-  var serviceUrl = "http://lwsa.mlb.com/tfs/tfs?file=/components/game/mlb/year_2017/month_05/day_08/gid_2017_05_08_wasmlb_balmlb_1/plays.xml&timecode=" + getTime();
+  var serviceUrl = "http://lwsa.mlb.com/tfs/tfs?file=/components/game/mlb/year_2017/month_05/day_14/gid_2017_05_14_atlmlb_miamlb_1/plays.xml&timecode=" + getTime();
   console.log(serviceUrl);
 
   $.ajax({
@@ -35,4 +37,4 @@ function getData() {
   });
 }
 
-//setInterval(function() { getData(); }, 10000);
+// setInterval(function() { getData(); }, 10000);
