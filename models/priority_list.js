@@ -25,14 +25,59 @@ function PriorityList(priorityArr) {
     };
 
     this.buildList = function() {
-        for(var i = 0; i < this.priorityArr.length; i++) {
-            if (this.lastNode() === null) {
-                this.head = new Node(priorityArr[i]);
+        var priorityList = this;
+        this.priorityArr.forEach(function(el) {
+            if (priorityList.lastNode() === null) {
+                priorityList.head = new Node(el);
             } else {
-                this.lastNode().setNext(new Node(priorityArr[i]));
+                priorityList.lastNode().setNext(new Node(el));
             }
-        }
+        });
+
     };
 
+    // Set up linked-list on construction
     this.buildList();
+
+
+    /*
+        Instance Methods
+     */
+    this.buildArr = function() {
+        var arr = [];
+        var node = this.head;
+        var priority = 1;
+        while(node !== null) {
+            node.val.priority = priority;
+            arr.push(node.val);
+            priority += 1;
+            node = node.next;
+        }
+
+        this.priorityArr = arr;
+    };
+
+    this.addItem = function(priority) {
+        var newNode = new Node(priority);
+        if (this.head === null) {
+            this.head = newNode;
+        } else {
+            var node = this.head;
+            var nextNode = this.head.next;
+            while(nextNode && nextNode.val.priority > priority.priority) {
+                node = nextNode;
+                nextNode = node.next;
+            }
+
+            node.next = newNode;
+            newNode.next = nextNode;
+        }
+
+        this.buildArr();
+        return this;
+    };
 }
+
+PriorityList.prototype.addPriority = function(priority) {
+
+};
