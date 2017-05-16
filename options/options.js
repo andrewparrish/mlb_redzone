@@ -1,11 +1,11 @@
 /*
-    Priority Model:
-    {
-        val: str,
-        text: str,
-        priority: int,
-        type: 'player || team'
-    }
+ Priority Model:
+ {
+ val: str,
+ text: str,
+ priority: int,
+ type: 'player || team'
+ }
  */
 
 
@@ -23,33 +23,14 @@ function addPriorityToSelect(select_id) {
     }
 }
 
-function sortPriorities(priorities) {
-    return priorities.sort(function(a, b) {
-       return a.priority - b.priority;
-    });
-}
-
-function addPriority(priorityList, priority) {
-    if (priorityList.length === 0) {
-        priorityList.push(priority);
-        return priorityList;
-    } else {
-        var sortedList = sortPriorities(priorityList);
-    }
-}
-
 function listItemForPriority(priority) {
     return "<li class='child'>" + priority.text + "</li>";
 }
 
-function updatePriorityList() {
+function updatePriorityList(list) {
     $('#priority-list').empty();
-    chrome.storage.sync.get('priorities', function(result) {
-        var list = result.priorities || {};
-        if (Object.keys(list) === 0) { return }
-        list.forEach((function(item) {
-            $('#priority-list').append(listItemForPriority(item));
-        }));
+    list.forEach(function(item) {
+        $('#priority-list').append(listItemForPriority(item));
     });
 }
 
@@ -58,25 +39,19 @@ function buildTeamPriority() {
     return {
         val: select.find(":selected").val(),
         text: select.find(":selected").text(),
-        priority: $('#add-team-priority').val(),
+        priority: parseInt($('#add-team-priority').val()),
         type: 'team'
     }
 }
 
 function saveTeam() {
-    chrome.storage.sync.get('priorities', function(list) {
-        var priorityList = list;
-        if (Object.keys(priorityList).length === 0) { priorityList = [] }
-        var updatedList = addPriority(priorityList, buildTeamPriority());
-
-        chrome.storage.sync.set({'priorities': updatedList }, updatePriorityList);
-    });
+    PriorityList.addPriority(buildTeamPriority(), updatePriorityList);
 }
 
 $(document).ready(function() {
     addTeamsToSelect('#add-team-select');
     addPriorityToSelect('#add-team-priority');
-    updatePriorityList();
+    PriorityList.getPriorities(updatePriorityList);
 
     $("#add-team-button").click(saveTeam);
 });
