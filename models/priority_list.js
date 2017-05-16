@@ -63,14 +63,19 @@ function PriorityList(priorityArr) {
             this.head = newNode;
         } else {
             var node = this.head;
-            var nextNode = this.head.next;
-            while(nextNode && nextNode.val.priority > priority.priority) {
-                node = nextNode;
-                nextNode = node.next;
-            }
+            if (node.val.priority >= priority.priority) {
+                this.head = newNode;
+                newNode.next = node;
+            } else {
+                var nextNode = this.head.next;
+                while(nextNode && nextNode.val.priority > priority.priority) {
+                    node = nextNode;
+                    nextNode = node.next;
+                }
 
-            node.next = newNode;
-            newNode.next = nextNode;
+                node.next = newNode;
+                newNode.next = nextNode;
+            }
         }
 
         this.buildArr();
