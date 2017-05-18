@@ -1,0 +1,23 @@
+{
+  "name": "mlb_redzone",
+  "version": "1.0.0",
+  "description": "Redzone for MLB fantasy ",
+  "main": "check_game.js",
+  "dependencies": {},
+  "devDependencies": {
+    "sinon-chrome": "^2.2.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrewparrish/mlb_redzone.git"
+  },
+  "author": "Andrew Parrish",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andrewparrish/mlb_redzone/issues"
+  },
+  "homepage": "https://github.com/andrewparrish/mlb_redzone#readme"
+}
