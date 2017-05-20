@@ -38,4 +38,4 @@ function getData() {
 }
 
 // setInterval(function() { getData(); }, 10000);
-setInterval(function() { chrome.tabs.executeScript( { file: "check_game.js" })}, 1000);
+setInterval(function() { chrome.tabs.executeScript(null, { file: "check_game.js" })}, 1000);
