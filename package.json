@@ -5,10 +5,14 @@
   "main": "check_game.js",
   "dependencies": {},
   "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.4.1",
+    "phantomjs": "^2.1.7",
+    "sinon": "^2.2.0",
     "sinon-chrome": "^2.2.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node_modules/.bin/phantomjs tests/run.js"
   },
   "repository": {
     "type": "git",
