@@ -1,0 +1,56 @@
+<game id="2017_05_20_phimlb_pitmlb_1" status_ind="I"  status="In Progress" inning="1" top_inning="F" b="1" s="2" o="0" inning_state="Bottom" event="at_bat_start" is_perfect_game="N" is_no_hitter="N">
+	<score ar="1" ah="2" ae="0" hr="0" hh="0" he="0" />
+<review challenges_away_used="0" challenges_away_remaining="1" challenges_home_used="0" challenges_home_remaining="1"/>	<players>
+		<batter pid="624428" team_abbrev="PIT" team_id="134" parent_team_abbrev="PIT" parent_team_id="134" current_position="LF" stand="L" b_height="5-9" ab="0" h="0" avg=".342" boxname="Frazier">
+		</batter>
+		<pitcher pid="592826" p_throws="R" pitches="3" strikes="2" balls="1" era="5.63" boxname="Velasquez"/>
+		<deck pid="543281" boxname="Harrison"/>
+		<hole pid="457705" boxname="McCutchen"/>
+	</players>
+	<splits batter="vs_RHP" pitcher="vs_LHB" runner="Empty"/>
+	<atbat num="6">
+		<p type="S" id="42" code="C" event_num="42" x="143.3" y="169.65" des="Called Strike" des_es="Strike cantado" sv_id="170520_201620" play_guid="db16466c-b00b-4f4a-ac5b-a2375aa0a21d" start_speed="92.5" end_speed="85.8" sz_top="3.285" sz_bot="1.487" pfx_x="-5.591405889864528" pfx_z="7.683299314734312" px="-0.689838017240185" pz="2.56029725845761" x0="-2.44025272242023" y0="50" z0="5.47931080298606" vx0="6.61073299174747" vy0="-134.170001575841" vz0="-4.43070629641128" ax="-10.3438820285762" ay="23.75945072754" az="-17.9602455760538" break_y="23.9" break_angle="26.2" break_length="4.5" pitch_type="FF" type_confidence=".806" zone="4" nasty="62" spin_dir="216.044" spin_rate="1900.837"  cc=""/>		<p type="S" id="43" code="F" event_num="43" x="146.42" y="161.7" des="Foul" des_es="Foul" sv_id="170520_201634" play_guid="c2c47e8b-4914-43f6-b0a7-2ea4f9b3b398" start_speed="93.9" end_speed="86.7" sz_top="3.285" sz_bot="1.487" pfx_x="-5.8249073000046" pfx_z="8.892859138337412" px="-0.771716406058057" pz="2.85484533224288" x0="-2.40306634777089" y0="50" z0="5.57148653463158" vx0="6.4380951090887" vy0="-135.967127652768" vz0="-4.48945757723164" ax="-10.9645436754334" ay="25.0209026713655" az="-15.4345302431175" break_y="23.9" break_angle="31.1" break_length="4.0" pitch_type="FF" type_confidence=".788" zone="11" nasty="54" spin_dir="213.224" spin_rate="2135.169"  cc=""/>		<p type="B" id="44" code="B" event_num="44" x="81.99" y="211.63" des="Ball" des_es="Bola mala" sv_id="170520_201701" play_guid="bcdcc752-f75e-4778-84e2-e91e3850a17d" start_speed="95.5" end_speed="88.8" sz_top="3.285" sz_bot="1.487" pfx_x="-4.114378682374296" pfx_z="10.731154964927148" px="0.918532898032934" pz="1.00542562621244" x0="-2.01628062087244" y0="50" z0="5.45071304606258" vx0="9.52932390688607" vy0="-138.036324337201" vz0="-10.1777938420541" ax="-8.00735898984946" ay="24.0864342187114" az="-11.2891916160648" break_y="23.9" break_angle="26.2" break_length="3.0" pitch_type="FF" type_confidence=".850" zone="14" nasty="49" spin_dir="200.976" spin_rate="2350.829"  cc=""/>	</atbat>
+	<field>
+		<offense type="home" id="pit">
+			<man bnum="4" pid="624428" boxname="Frazier" note="0-for-0" hrs="1" rbis="10"/>
+		</offense>
+		<defense type="away" id="phi">
+			<man pid="592826" s_po="2" s_ass="3" s_err="0" s_fldg="1.000" p_sb="1" p_cs="1" pos="p"/>
+			<man pid="519237" s_po="198" s_ass="15" s_err="2" s_fldg=".991" c_sb="5" c_cs="2" pos="c"/>
+			<man pid="571830" s_po="221" s_ass="14" s_err="1" s_fldg=".996" pos="1b"/>
+			<man pid="514917" s_po="66" s_ass="98" s_err="3" s_fldg=".982" pos="2b"/>
+			<man pid="520471" s_po="57" s_ass="97" s_err="4" s_fldg=".975" pos="ss"/>
+			<man pid="596748" s_po="31" s_ass="46" s_err="5" s_fldg=".939" pos="3b"/>
+			<man pid="571437" s_po="64" s_ass="1" s_err="1" s_fldg=".985" pos="lf"/>
+			<man pid="546318" s_po="101" s_ass="1" s_err="1" s_fldg=".990" pos="cf"/>
+			<man pid="459431" s_po="67" s_ass="4" s_err="0" s_fldg="1.000" pos="rf"/>
+		</defense>
+		<ball />
+	</field>
+	<lineup>
+		<team type="home" pitcher="467100" index="1">
+			<man pid="624428"/>
+			<man pid="543281"/>
+			<man pid="457705"/>
+			<man pid="605137"/>
+			<man pid="501896"/>
+			<man pid="444379"/>
+			<man pid="465041"/>
+			<man pid="474568"/>
+			<man pid="467100"/>
+		</team>
+		<team type="away" pitcher="592826" index="6">
+			<man pid="514917"/>
+			<man pid="520471"/>
+			<man pid="571437"/>
+			<man pid="571830"/>
+			<man pid="546318"/>
+			<man pid="596748"/>
+			<man pid="459431"/>
+			<man pid="519237"/>
+			<man pid="592826"/>
+		</team>
+	</lineup>
+	<weather temp="70" condition="Overcast" wind="7mph In From CF"/>
+	<control wait="10" box="10"/>
+</game>
