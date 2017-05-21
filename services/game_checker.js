@@ -3,7 +3,8 @@
  */
 function GameChecker() { }
 
-GameChecker.parse_game_status = function(xml) {
-    var status = $(xml).find('game');
-    console.log(status);
+GameChecker.parse_game_status = function(data) {
+    var xml = $.parseXML(data);
+    var status = $(xml).find('game').attr('inning_state');
+    return status;
 };
