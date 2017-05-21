@@ -21,21 +21,10 @@ jsdom.env({
                 var data = fs.readFileSync('test/test_data/plays.xml', { encoding: 'utf8' });
                 var status = GameChecker.parse_game_status(data);
                 expect(status).to.equal('Bottom');
+                data = fs.readFileSync('test/test_data/commercial.plays.xml', { encoding: 'utf8' });
+                status = GameChecker.parse_game_status(data);
+                expect(status).to.equal('Middle');
                 done();
-                // $.ajax({
-                //     type: "GET",
-                //     url: "test/test_data/plays.xml",
-                //     dataType: "xml",
-                //     success: function (data) {
-                //         console.log(data);
-                //         GameChecker.parse_game_status(data);
-                //         done();
-                //     },
-                //     error: function(err) {
-                //         console.log("ERROR");
-                //         console.log(err);
-                //     }
-                // })
             });
         });
     }
