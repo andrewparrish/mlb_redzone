@@ -7,13 +7,14 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "jquery": "^3.2.1",
+    "jsdom": "^10.1.0",
     "mocha": "^3.4.1",
     "phantomjs": "^2.1.7",
     "sinon": "^2.2.0",
     "sinon-chrome": "^2.2.1"
   },
   "scripts": {
-    "test": "node_modules/.bin/phantomjs tests/run.js"
+    "test": "./node_modules/mocha/bin/mocha"
   },
   "repository": {
     "type": "git",
