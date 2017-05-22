@@ -7,6 +7,6 @@ describe('priority list', function() {
     it('should properly add an element', function(done) {
         var list = new PriorityList([]);
         expect(list.priorityArr).to.deep.equal([]);
-       done();
+        done();
     });
 });

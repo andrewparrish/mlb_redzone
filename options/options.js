@@ -51,7 +51,7 @@ function saveTeam() {
 $(document).ready(function() {
     addTeamsToSelect('#add-team-select');
     addPriorityToSelect('#add-team-priority');
-    PriorityList.getPriorities(updatePriorityList);
+    PriorityList.setInitialPriorities(updatePriorityList);
 
     $("#add-team-button").click(saveTeam);
 });
