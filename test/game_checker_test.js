@@ -32,19 +32,33 @@ jsdom.env({
                 var priority_list_context = exec_file("models/priority_list.js", { chrome: chrome, console: console });
                 PriorityList = priority_list_context.PriorityList;
 
-                var context = exec_file('services/game_checker.js', { $: $, PriorityList: PriorityList, console: console });
+                var context = exec_file('services/game_checker.js', { $: $, chrome: chrome, PriorityList: PriorityList, console: console });
                 GameChecker = context.GameChecker;
                 done();
             });
 
             describe('construction, setup, and getting priorities', function() {
-                before(function(done) {
-                    done();
-                });
-
                 it('should properly set the user priorities', function(done) {
                     var checker = new GameChecker();
                     expect(checker.priorities.length).to.equal(1);
+                    done();
+                });
+            });
+
+            describe('script injections', function() {
+                before(function(done) {
+                    chrome.tabs.executeScript.returns([
+                        "2017_05_21_milmlb_chnmlb_1",
+                        "2017_05_21_bosmlb_oakmlb_1",
+                        "2017_05_21_chamlb_seamlb_1",
+                        "2017_05_21_miamlb_lanmlb_1",
+                        "2017_05_21_arimlb_sdnmlb_1"]);
+                    done();
+                });
+
+                it('can get current games by injecting script', function(done) {
+                    var checker = new GameChecker();
+                    expect(checker.getCurrentGames().length).to.equal(5);
                     done();
                 });
             });

@@ -16,7 +16,11 @@
     "tabs"
   ],
   "background":{
-    "scripts":["jquery-3.2.1.min.js", "gamechecker.js", "check_game.js"],
+    "scripts":[
+      "jquery-3.2.1.min.js",
+      "gamechecker.js",
+      "injections/scrape_current_games.js"
+    ],
     "persistent": true
   },
   "web_accessible_resources": ["check_game.js"]
