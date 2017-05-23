@@ -4,11 +4,17 @@
 function GameChecker() {
     this.priorities = [];
     this.currentGames = [];
+    this.currentGameId = null;
 
     this.setInitialPriorities = function() {
         PriorityList.setInitialPriorities(function(list) {
             this.priorities = list;
         }.bind(this));
+    };
+
+    this.getCurrentGame = function() {
+        this.currentGameId = chrome.tabs.executeScript(null, { file: "injections/scrape_current_game.js" });
+        return this.currentGameId;
     };
 
     this.getCurrentGames = function() {

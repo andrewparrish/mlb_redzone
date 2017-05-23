@@ -47,18 +47,30 @@ jsdom.env({
 
             describe('script injections', function() {
                 before(function(done) {
-                    chrome.tabs.executeScript.returns([
-                        "2017_05_21_milmlb_chnmlb_1",
-                        "2017_05_21_bosmlb_oakmlb_1",
-                        "2017_05_21_chamlb_seamlb_1",
-                        "2017_05_21_miamlb_lanmlb_1",
-                        "2017_05_21_arimlb_sdnmlb_1"]);
+                    chrome.tabs.executeScript
+                        .withArgs(null, { file: "injections/scrape_current_games.js" })
+                        .returns([
+                            "2017_05_21_milmlb_chnmlb_1",
+                            "2017_05_21_bosmlb_oakmlb_1",
+                            "2017_05_21_chamlb_seamlb_1",
+                            "2017_05_21_miamlb_lanmlb_1",
+                            "2017_05_21_arimlb_sdnmlb_1"]);
+
+                    chrome.tabs.executeScript
+                        .withArgs(null, { file: "injections/scrape_current_game.js" })
+                        .returns("2017_05_21_milmlb_chnmlb_1");
                     done();
                 });
 
                 it('can get current games by injecting script', function(done) {
                     var checker = new GameChecker();
                     expect(checker.getCurrentGames().length).to.equal(5);
+                    done();
+                });
+
+                it('can get the currently active game id', function(done) {
+                    var checker = new GameChecker();
+                    expect(checker.getCurrentGame()).to.equal("2017_05_21_milmlb_chnmlb_1");
                     done();
                 });
             });
