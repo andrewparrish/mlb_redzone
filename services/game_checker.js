@@ -1,6 +1,7 @@
 /**
  * Created by andrewparrish on 5/20/17.
  */
+
 function GameChecker() {
     this.priorities = [];
     this.currentGames = [];
