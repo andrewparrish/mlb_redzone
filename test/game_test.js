@@ -10,7 +10,7 @@ var teamAsHash = null;
 
 describe('game', function() {
     before(function(done) {
-        teamAsHash = { teamOne: 'teamOne', teamTwo: 'teamTwo', status: 'Middle'};
+        teamAsHash = { teamOne: 'teamOne', teamTwo: 'teamTwo', status: 'Middle', id: '2017_05_21_miamlb_lanmlb_1'};
         global.chrome = chrome;
 
         chrome.storage.sync.set.yields([teamAsHash]);
@@ -42,7 +42,7 @@ describe('game', function() {
 
         describe('add Games to Array', function() {
             before(function(done) {
-                var time = new Date();
+                var time = Date.now();
                 teamAsHash.lastUpdated = time;
                 done();
             });

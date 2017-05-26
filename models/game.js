@@ -3,16 +3,12 @@
  */
 const GAMES_KEY = 'games';
 
-function Game(teamOne, teamTwo, status) {
+function Game(id, teamOne, teamTwo, status) {
     this.teamOne = teamOne;
     this.teamTwo = teamTwo;
     this.status = status;
-    this.lastUpdated = Date.now();
-    this.id = null;
-    this._setId = function() {
-        this.id =  this.id || ("" + this.teamOne + this.teamTwo + this.lastUpdated);
-    };
-    this._setId();
+    this.lastUpdated = new Date();
+    this.id = id;
 
     const COMMERCIAL_STATUSES = ["Middle"];
 
@@ -37,7 +33,7 @@ function Game(teamOne, teamTwo, status) {
         });
 
         if (gamesIds.indexOf(this.id) !== -1) {
-            gamesArray[gamesIds.indexOf(this.id)] = this;
+            gamesArray.push(this);
         } else {
             gamesArray = [this._gameAsHash()];
         }
