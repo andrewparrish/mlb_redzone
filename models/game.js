@@ -25,25 +25,16 @@ function Game(id, teamOne, teamTwo, status) {
     this.isInCommercialBreak = function() {
         return COMMERCIAL_STATUSES.indexOf(this.status) !== -1;
     };
-
-    this._addGameToArray = function(gamesArray) {
-        gamesArray = gamesArray || [];
-        var gamesIds = gamesArray.map(function(gameHash) {
-            return new Game(gameHash).id;
-        });
-
-        if (gamesIds.indexOf(this.id) !== -1) {
-            gamesArray.push(this);
-        } else {
-            gamesArray = [this._gameAsHash()];
-        }
-
-        return gamesArray;
-    };
-
+    
     this.saveGame = function() {
-        return chrome.storage.sync.get(GAMES_KEY, function(result) {
-
+        return chrome.storage.sync.set({ [this.id]: this._gameAsHash() }, function(result) {
+          return result; 
         });
     }.bind(this);
+
+    this.updateStatus = function(status) {
+      this.status = status;
+      this.lastUpdated = new Date();
+      return this;
+    };
 }
