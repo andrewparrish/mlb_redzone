@@ -18,9 +18,7 @@
       "jquery-3.2.1.min.js",
       "models/priority_list.js",
       "services/game_checker.js",
-      "injections/scrape_current_games.js",
-      "injections/scrape_current_game.js",
-      "gamechecker.js"
+      "background.js"
     ],
     "persistent": true
   },

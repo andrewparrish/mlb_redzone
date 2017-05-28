@@ -3,8 +3,6 @@
  */
 function GameChecker() {
     this.priorities = [];
-    this.currentGames = [];
-    this.currentGameId = null;
 
     this.setInitialPriorities = function() {
         PriorityList.setInitialPriorities(function(list) {
@@ -14,13 +12,20 @@ function GameChecker() {
 
     this.setInitialPriorities();
 
+    this._getCurrentTab = function(handleTab) {
+        chrome.tabs.query({ url: '*://m.mlb.com/*' }, handleTab);
+    };
+
     this.getCurrentGame = function() {
-        this.currentGameId = chrome.tabs.executeScript({ file: "injections/scrape_current_game.js" });
-        return this.currentGameId;
+        this._getCurrentTab(function(results) {
+            chrome.tabs.executeScript(results[0].id, { file: "injections/scrape_current_game.js" }, function(ids) {
+                console.log("Active ids", ids);
+            });
+        });
     };
 
     this.getCurrentGameIds = function(handleIds) {
-        chrome.tabs.query({ url: '*://m.mlb.com/*' }, function(results) {
+        this._getCurrentTab(function(results) {
            chrome.tabs.executeScript(results[0].id, { file: "injections/scrape_current_games.js" }, handleIds);
         });
     };
@@ -29,7 +34,7 @@ function GameChecker() {
         this.getCurrentGameIds(function(ids) {
             ids[0].map(function(id) {
                 this._getGameData(id, function(msg) {
-                    console.log("STATUS", this._parseGameStatus(msg));
+                    console.log(id, this._parseGameStatus(msg));
                 }.bind(this));
             }.bind(this));
         }.bind(this));
