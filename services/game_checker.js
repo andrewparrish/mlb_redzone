@@ -15,30 +15,36 @@ function GameChecker() {
     this.setInitialPriorities();
 
     this.getCurrentGame = function() {
-        this.currentGameId = chrome.tabs.executeScript(null, { file: "injections/scrape_current_game.js" });
+        this.currentGameId = chrome.tabs.executeScript({ file: "injections/scrape_current_game.js" });
         return this.currentGameId;
     };
 
-    this.getCurrentGameIds = function() {
-        this.currentGames = chrome.tabs.executeScript(null, { file: "injections/scrape_current_games.js" });
-        return this.currentGames;
+    this.getCurrentGameIds = function(handleIds) {
+        chrome.tabs.query({ url: '*://m.mlb.com/*' }, function(results) {
+           chrome.tabs.executeScript(results[0].id, { file: "injections/scrape_current_games.js" }, handleIds);
+        });
     };
 
     this.getCurrentGames = function() {
-        this.getCurrentGames().map(function(id) {
-            this._getGameData(id, function(msg) {
-
-            });
+        this.getCurrentGameIds(function(ids) {
+            ids.map(function(id) {
+                this._getGameData(id, function(msg) {
+                    console.log(msg);
+                });
+            }.bind(this));
         }.bind(this));
     };
 
     this._getServiceUrl = function(gameId, date) {
-
+        var timeObj = this._parseTimeToObj(date);
+        return "http://lwsa.mlb.com/tfs/tfs?file=/components/game/mlb/year_" +
+                timeObj.year + "/month_" + timeObj.month + "/day_" + timeObj.day +
+                "gid_" + gameId + "/plays.xml&timecode=" + timeObj.timecode;
     };
 
     this._parseTimeToObj = function(date) {
         var toTwoDigit = function(str) {
-            if (str.length == 1) {
+            if (str.length === 1) {
                 str = "0" + str;
             }
             return str;

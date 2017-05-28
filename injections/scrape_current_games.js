@@ -7,6 +7,7 @@ function uniqValues(val, index, self) {
 }
 
 var games = document.getElementsByClassName('game during inprogress');
+console.log("GAMES", games);
 var arr = Object.keys(games).map(function(key) {
    return games[key];
 });
@@ -15,6 +16,5 @@ var ids = arr.map(function(game) {
 });
 
 var ids = ids.filter(uniqValues);
-
 // Return values back to the called script
-ids;
+ids

@@ -9,19 +9,24 @@
   },
   "permissions": [
     "activeTab",
-    "http://lwsa.mlb.com/*",
     "storage",
-    "<all_urls>",
     "*://*/*",
     "tabs"
   ],
   "background":{
     "scripts":[
       "jquery-3.2.1.min.js",
-      "gamechecker.js",
-      "injections/scrape_current_games.js"
+      "models/priority_list.js",
+      "services/game_checker.js",
+      "injections/scrape_current_games.js",
+      "injections/scrape_current_game.js",
+      "gamechecker.js"
     ],
     "persistent": true
   },
-  "web_accessible_resources": ["check_game.js"]
+  "web_accessible_resources": [
+    "check_game.js",
+    "injections/scrape_current_games.js",
+    "injections/scrape_current_game.js"
+  ]
 }

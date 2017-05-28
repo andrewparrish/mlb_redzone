@@ -39,3 +39,6 @@ function getData() {
 
 // setInterval(function() { getData(); }, 10000);
 // setInterval(function() { chrome.tabs.executeScript(null, { file: "check_game.js" })}, 1000);
+var checker = new GameChecker();
+setInterval(function() {
+  checker.getCurrentGames() }, 10000);
