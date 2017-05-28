@@ -27,7 +27,7 @@ function GameChecker() {
 
     this.getCurrentGames = function() {
         this.getCurrentGameIds(function(ids) {
-            ids.map(function(id) {
+            ids[0].map(function(id) {
                 this._getGameData(id, function(msg) {
                     console.log(msg);
                 });
@@ -39,7 +39,7 @@ function GameChecker() {
         var timeObj = this._parseTimeToObj(date);
         return "http://lwsa.mlb.com/tfs/tfs?file=/components/game/mlb/year_" +
                 timeObj.year + "/month_" + timeObj.month + "/day_" + timeObj.day +
-                "gid_" + gameId + "/plays.xml&timecode=" + timeObj.timecode;
+                "/gid_" + gameId + "/plays.xml&timecode=" + timeObj.timecode;
     };
 
     this._parseTimeToObj = function(date) {
@@ -55,7 +55,8 @@ function GameChecker() {
             day: toTwoDigit(date.getUTCDate().toString()),
             hour: toTwoDigit(date.getUTCHours().toString()),
             min: toTwoDigit(date.getUTCMinutes().toString()),
-            sec: toTwoDigit(Math.round(date.getSeconds() / 10) * 10)
+            sec: toTwoDigit(Math.round(date.getSeconds() / 10) * 10),
+            year: date.getFullYear()
         };
 
         timeObj.timecode = "" + date.getFullYear() + timeObj.month +
