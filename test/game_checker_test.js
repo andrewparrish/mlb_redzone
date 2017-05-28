@@ -64,7 +64,7 @@ jsdom.env({
 
                 it('can get current games by injecting script', function(done) {
                     var checker = new GameChecker();
-                    expect(checker.getCurrentGames().length).to.equal(5);
+                    expect(checker.getCurrentGameIds().length).to.equal(5);
                     done();
                 });
 
@@ -77,10 +77,11 @@ jsdom.env({
 
             it('should be able to parse game status', function (done) {
                 var data = fs.readFileSync('test/test_data/plays.xml', { encoding: 'utf8' });
-                var status = GameChecker.parse_game_status(data);
+                var checker = new GameChecker();
+                var status = checker._parseGameStatus(data);
                 expect(status).to.equal('Bottom');
                 data = fs.readFileSync('test/test_data/commercial.plays.xml', { encoding: 'utf8' });
-                status = GameChecker.parse_game_status(data);
+                status = checker._parseGameStatus(data);
                 expect(status).to.equal('Middle');
                 done();
             });

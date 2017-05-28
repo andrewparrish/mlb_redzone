@@ -1,8 +1,6 @@
 /**
  * Created by andrewparrish on 5/24/17.
  */
-const GAMES_KEY = 'games';
-
 function Game(id, teamOne, teamTwo, status) {
     this.teamOne = teamOne;
     this.teamTwo = teamTwo;
@@ -27,7 +25,9 @@ function Game(id, teamOne, teamTwo, status) {
     };
     
     this.saveGame = function() {
-        return chrome.storage.sync.set({ [this.id]: this._gameAsHash() }, function(result) {
+        var data = {};
+        data[this.id] = this._gameAsHash();
+        return chrome.storage.sync.set(data, function(result) {
           return result; 
         });
     }.bind(this);
