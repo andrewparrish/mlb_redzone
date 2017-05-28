@@ -29,8 +29,8 @@ function GameChecker() {
         this.getCurrentGameIds(function(ids) {
             ids[0].map(function(id) {
                 this._getGameData(id, function(msg) {
-                    console.log(msg);
-                });
+                    console.log("STATUS", this._parseGameStatus(msg));
+                }.bind(this));
             }.bind(this));
         }.bind(this));
     };
@@ -77,8 +77,7 @@ function GameChecker() {
     };
     
     this._parseGameStatus = function(data) {
-      var xml = $.parseXML(data);
-      var status = $(xml).find('game').attr('inning_state');
+      var status = $(data).find('game').attr('inning_state');
       return status;
     };
 }

@@ -8,7 +8,7 @@ function Game(id, teamOne, teamTwo, status) {
     this.lastUpdated = new Date();
     this.id = id;
 
-    const COMMERCIAL_STATUSES = ["Middle"];
+    const COMMERCIAL_STATUSES = ["Middle", "End"];
 
     this._gameAsHash = function() {
         return {
