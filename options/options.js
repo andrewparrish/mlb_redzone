@@ -17,6 +17,14 @@ function addTeamsToSelect(select_id) {
     });
 }
 
+function addBlackoutTeams() {
+    $.getJSON("../mappings/teams.json", function(teams) {
+        $.each(teams, function(val) {
+            Team.findById(val, updateBlackoutTeam);
+        });
+    });
+}
+
 function addPriorityToSelect() {
     for(i = 1; i <= $('#priority-list').children().length; i++) {
         $(select_id).append($("<option>", { value: i, text: i }));
@@ -25,6 +33,11 @@ function addPriorityToSelect() {
 
 function listItemForPriority(priority) {
     return "<li class='child'>" + priority.text + "</li>";
+}
+
+function listItemForBlackout(team) {
+    var id = "team_" + team.id;
+    return "<li id=\'" + id + "\'" + "class='child'>" + team.displayName + "</li>";
 }
 
 function updatePriorityList(list) {
@@ -45,14 +58,29 @@ function buildTeamPriority() {
     }
 }
 
+function updateBlackoutTeam(team) {
+    if ($('#team_' + team.id).length === 0) {
+        $('#blackout-list').append(listItemForBlackout(team));
+    }
+}
+
 function saveTeam() {
     PriorityList.addPriority(buildTeamPriority(), updatePriorityList);
 }
 
+function saveBlackout() {
+    var select = $('#add-ignore-select');
+    var team = new Team(select.find(":selected").val(), select.find(':selected').text(), true);
+    team.saveTeam(addBlackoutTeams);
+}
+
 $(document).ready(function() {
     addTeamsToSelect('#add-team-select');
+    addTeamsToSelect('#add-ignore-select');
+    addBlackoutTeams();
     addPriorityToSelect();
     PriorityList.setInitialPriorities(updatePriorityList);
 
     $("#add-team-button").click(saveTeam);
+    $("#add-ignore-button").click(saveBlackout);
 });

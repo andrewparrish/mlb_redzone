@@ -2,9 +2,15 @@ body {
     width: 300px;
 }
 
-#add-team {
+.add-priority {
     display: flex;
     justify-content: flex-start;
+}
+
+#options-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .child {
