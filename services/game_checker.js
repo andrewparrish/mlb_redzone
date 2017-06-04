@@ -16,11 +16,9 @@ function GameChecker() {
         chrome.tabs.query({ url: '*://m.mlb.com/*' }, handleTab);
     };
 
-    this.getCurrentGame = function() {
+    this.getCurrentGame = function(handleGame) {
         this._getCurrentTab(function(results) {
-            chrome.tabs.executeScript(results[0].id, { file: "injections/scrape_current_game.js" }, function(ids) {
-                console.log("Active ids", ids);
-            });
+            chrome.tabs.executeScript(results[0].id, { file: "injections/scrape_current_game.js" }, handleGame);
         });
     };
 
@@ -30,15 +28,27 @@ function GameChecker() {
         });
     };
 
-    this.getCurrentGames = function() {
+    this.updateCurrentGames = function(afterUpdate) {
         this.getCurrentGameIds(function(ids) {
             ids[0].map(function(id) {
-                this._getGameData(id, function(msg) {
-                    console.log(id, this._parseGameStatus(msg));
-                }.bind(this));
+                return this._getGameData(id, this.updateGame);
             }.bind(this));
+            if (afterUpdate) { afterUpdate() }
         }.bind(this));
     };
+
+    this.checkForGameChange = function() {
+        this.getCurrentGame(function(gameId) {
+            gameId = gameId[0];
+            // TODO
+        });
+    }.bind(this);
+
+    this.updateGame = function(msg) {
+        var gameData = this._parseGameData(msg);
+        var game = new Game(gameData.id, gameData.teamOne, gameData.teamTwo, gameData.status);
+        game.saveGame();
+    }.bind(this);
 
     this._getServiceUrl = function(gameId, date) {
         var timeObj = this._parseTimeToObj(date);
@@ -82,7 +92,17 @@ function GameChecker() {
     };
     
     this._parseGameStatus = function(data) {
-      var status = $(data).find('game').attr('inning_state');
-      return status;
+      return $(data).find('game').attr('inning_state');
     };
+
+    this._parseGameData = function(data) {
+        var id  = $(data).find('game').attr('id');
+        var parsed = /\d+_\d+_\d+_(\w+)mlb_(\w+)mlb/.exec(id);
+        return {
+            id: id,
+            teamOne: parsed[1],
+            teamTwo: parsed[2],
+            status: this._parseGameStatus(data)
+        }
+    }
 }

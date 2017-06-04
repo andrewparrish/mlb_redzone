@@ -1,5 +1,4 @@
 var checker = new GameChecker();
-checker.getCurrentGame();
 setInterval(function() {
-  checker.getCurrentGames()
+  checker.updateCurrentGames(checker.checkForGameChange);
 }, 10000);

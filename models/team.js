@@ -28,7 +28,6 @@ Team.findById = function(id, onSuccess, onFailure) {
         if (team === undefined) {
             if (onFailure) { onFailure() }
         } else {
-            console.log("TEAM", team);
             if (onSuccess) { onSuccess(team) }
         }
     });

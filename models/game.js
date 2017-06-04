@@ -1,6 +1,7 @@
 /**
  * Created by andrewparrish on 5/24/17.
  */
+
 function Game(id, teamOne, teamTwo, status) {
     this.teamOne = teamOne;
     this.teamTwo = teamTwo;
