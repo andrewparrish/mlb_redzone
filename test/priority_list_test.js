@@ -9,4 +9,16 @@ describe('priority list', function() {
         expect(list.priorityArr).to.deep.equal([]);
         done();
     });
+
+    it('should properly add multiple sequential elements', function(done) {
+      var list = new PriorityList([]);
+      var a = { val: 'a', priority: 1 };
+      list.addItem(a);
+      var b = { val: 'b', priority: 2 };
+      list.addItem(b);
+      var c = { val: 'c', priority: 3 };
+      list.addItem(c);
+      expect(list.priorityArr).to.deep.equal([a, b, c]);
+      done();
+    });
 });

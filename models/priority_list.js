@@ -68,7 +68,7 @@ function PriorityList(priorityArr) {
                 newNode.next = node;
             } else {
                 var nextNode = this.head.next;
-                while(nextNode && nextNode.val.priority > priority.priority) {
+                while(nextNode && nextNode.val.priority < priority.priority) {
                     node = nextNode;
                     nextNode = node.next;
                 }

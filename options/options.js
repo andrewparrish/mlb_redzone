@@ -17,8 +17,8 @@ function addTeamsToSelect(select_id) {
     });
 }
 
-function addPriorityToSelect(select_id) {
-    for(i = 1; i <= $('#priority-list').length; i++) {
+function addPriorityToSelect() {
+    for(i = 1; i <= $('#priority-list').children().length; i++) {
         $(select_id).append($("<option>", { value: i, text: i }));
     }
 }
@@ -29,6 +29,7 @@ function listItemForPriority(priority) {
 
 function updatePriorityList(list) {
     $('#priority-list').empty();
+    $('#add-team-priority').append($("<option>", { value: (list.length + 1), text: (list.length + 1) }));
     list.forEach(function(item) {
         $('#priority-list').append(listItemForPriority(item));
     });
@@ -50,7 +51,7 @@ function saveTeam() {
 
 $(document).ready(function() {
     addTeamsToSelect('#add-team-select');
-    addPriorityToSelect('#add-team-priority');
+    addPriorityToSelect();
     PriorityList.setInitialPriorities(updatePriorityList);
 
     $("#add-team-button").click(saveTeam);
