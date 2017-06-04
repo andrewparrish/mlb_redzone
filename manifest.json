@@ -18,6 +18,7 @@
       "jquery-3.2.1.min.js",
       "models/priority_list.js",
       "models/team.js",
+      "models/game.js",
       "services/game_checker.js",
       "background.js"
     ],

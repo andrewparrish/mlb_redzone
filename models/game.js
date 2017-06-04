@@ -39,3 +39,17 @@ function Game(id, teamOne, teamTwo, status) {
       return this;
     };
 }
+
+Game.findById = function(id, onSuccess, onFailure) {
+  chrome.storage.sync.get(id, function(result) {
+     var data = result[id];
+     if (data === undefined) {
+         if (onFailure) { onFailure() }
+     } else {
+         if (onSuccess) {
+             var game = new Game(data.id, data.teamOne, data.teamTwo, data.status);
+             onSuccess(game)
+         }
+     }
+  });
+};

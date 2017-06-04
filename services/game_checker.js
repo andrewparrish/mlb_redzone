@@ -24,7 +24,7 @@ function GameChecker() {
 
     this.getCurrentGameIds = function(handleIds) {
         this._getCurrentTab(function(results) {
-           chrome.tabs.executeScript(results[0].id, { file: "injections/scrape_current_games.js" }, handleIds);
+            chrome.tabs.executeScript(results[0].id, { file: "injections/scrape_current_games.js" }, handleIds);
         });
     };
 
@@ -37,11 +37,37 @@ function GameChecker() {
         }.bind(this));
     };
 
+    this.changeGame = function(gameId) {
+        this._getCurrentTab(function(results) {
+            chrome.tabs.executeScript(results[0].id, {
+                code: 'var gameToChangeToId = \'' + gameId + '\';'
+            }, function() {
+                chrome.tabs.executeScript(results[0].id, { file: "injections/change_current_game.js" });
+            });
+        });
+    };
+
     this.checkForGameChange = function() {
         this.getCurrentGame(function(gameId) {
             gameId = gameId[0];
-            // TODO
-        });
+            Game.findById(gameId, function(game) {
+                console.log("GAME", game);
+                if (game.isInCommercialBreak()) {
+                    // Testing function
+                    this.getCurrentGameIds(function (ids) {
+                        console.log("IDS TO CHANGE", ids);
+                        ids = ids[0];
+                        for(var i = 0; i < ids.length; i++) {
+                            if (gameId !== ids[i]) {
+                                console.log("GAME TO CHANGE TO", gameId);
+                                this.changeGame(ids[i]);
+                                break;
+                            }
+                        }
+                    }.bind(this));
+                }
+            }.bind(this));
+        }.bind(this));
     }.bind(this);
 
     this.updateGame = function(msg) {
@@ -53,8 +79,8 @@ function GameChecker() {
     this._getServiceUrl = function(gameId, date) {
         var timeObj = this._parseTimeToObj(date);
         return "http://lwsa.mlb.com/tfs/tfs?file=/components/game/mlb/year_" +
-                timeObj.year + "/month_" + timeObj.month + "/day_" + timeObj.day +
-                "/gid_" + gameId + "/plays.xml&timecode=" + timeObj.timecode;
+            timeObj.year + "/month_" + timeObj.month + "/day_" + timeObj.day +
+            "/gid_" + gameId + "/plays.xml&timecode=" + timeObj.timecode;
     };
 
     this._parseTimeToObj = function(date) {
@@ -82,17 +108,17 @@ function GameChecker() {
 
     this._getGameData = function(gameId, handleGameData) {
         $.ajax({
-           type: "GET",
+            type: "GET",
             url: this._getServiceUrl(gameId, new Date()),
             success: handleGameData,
             error: function(err) {
-               console.error(err);
+                console.error(err);
             }
         });
     };
-    
+
     this._parseGameStatus = function(data) {
-      return $(data).find('game').attr('inning_state');
+        return $(data).find('game').attr('inning_state');
     };
 
     this._parseGameData = function(data) {
