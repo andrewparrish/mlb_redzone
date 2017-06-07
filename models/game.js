@@ -24,32 +24,32 @@ function Game(id, teamOne, teamTwo, status) {
     this.isInCommercialBreak = function() {
         return COMMERCIAL_STATUSES.indexOf(this.status) !== -1;
     };
-    
+
     this.saveGame = function() {
         var data = {};
         data[this.id] = this._gameAsHash();
-        return chrome.storage.sync.set(data, function(result) {
-          return result; 
+        return chrome.storage.local.set(data, function(result) {
+            return result;
         });
     }.bind(this);
 
     this.updateStatus = function(status) {
-      this.status = status;
-      this.lastUpdated = new Date();
-      return this;
+        this.status = status;
+        this.lastUpdated = new Date();
+        return this;
     };
 }
 
 Game.findById = function(id, onSuccess, onFailure) {
-  chrome.storage.sync.get(id, function(result) {
-     var data = result[id];
-     if (data === undefined) {
-         if (onFailure) { onFailure() }
-     } else {
-         if (onSuccess) {
-             var game = new Game(data.id, data.teamOne, data.teamTwo, data.status);
-             onSuccess(game)
-         }
-     }
-  });
+    chrome.storage.local.get(id, function(result) {
+        var data = result[id];
+        if (data === undefined) {
+            if (onFailure) { onFailure('Could not find game.'); }
+        } else {
+            if (onSuccess) {
+                var game = new Game(data.id, data.teamOne, data.teamTwo, data.status);
+                onSuccess(game)
+            }
+        }
+    });
 };

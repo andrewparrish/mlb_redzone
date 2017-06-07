@@ -18,12 +18,12 @@ function Team(id, displayName, blackout) {
     this.saveTeam = function(afterSave) {
         var data = {};
         data[this.id] = this._teamAsHash();
-        chrome.storage.sync.set(data, afterSave);
+        chrome.storage.local.set(data, afterSave);
     }.bind(this);
 }
 
 Team.findById = function(id, onSuccess, onFailure) {
-    chrome.storage.sync.get(id, function(result) {
+    chrome.storage.local.get(id, function(result) {
         var team = result[id];
         if (team === undefined) {
             if (onFailure) { onFailure() }

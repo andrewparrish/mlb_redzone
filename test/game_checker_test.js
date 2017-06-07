@@ -28,7 +28,7 @@ jsdom.env({
                 priorityHash[PRIORITIES_KEY] = [priority];
 
                 global.chrome = chrome;
-                chrome.storage.sync.get.yields(priorityHash);
+                chrome.storage.local.get.yields(priorityHash);
                 var priority_list_context = exec_file("models/priority_list.js", { chrome: chrome, console: console });
                 PriorityList = priority_list_context.PriorityList;
 

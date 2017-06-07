@@ -15,11 +15,13 @@
   ],
   "background":{
     "scripts":[
-      "jquery-3.2.1.min.js",
+      "external/jquery-3.2.1.min.js",
+      "external/bluebird.min.js",
       "models/priority_list.js",
       "models/team.js",
       "models/game.js",
       "services/game_checker.js",
+      "services/game_changer.js",
       "background.js"
     ],
     "persistent": true

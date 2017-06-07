@@ -14,8 +14,8 @@ describe('game', function() {
         teamAsHash = { teamOne: 'teamOne', teamTwo: 'teamTwo', status: 'Middle', id: '2017_05_21_miamlb_lanmlb_1'};
         global.chrome = chrome;
 
-        chrome.storage.sync.set.yields([teamAsHash]).returns(teamAsHash);
-        chrome.storage.sync.get.yields({});
+        chrome.storage.local.set.yields([teamAsHash]).returns(teamAsHash);
+        chrome.storage.local.get.yields({});
 
         var context = exec_file("models/game.js", { console: console, chrome: chrome });
         Game = context.Game;

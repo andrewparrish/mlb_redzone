@@ -86,7 +86,7 @@ function PriorityList(priorityArr) {
 const PRIORITIES_KEY = "priorities";
 
 PriorityList.setInitialPriorities = function(handleResult) {
-    chrome.storage.sync.get(PRIORITIES_KEY, function(result) {
+    chrome.storage.local.get(PRIORITIES_KEY, function(result) {
         var list = result[PRIORITIES_KEY];
         if (list === undefined || Object.keys(list) === 0) { list = []; }
 
@@ -95,7 +95,7 @@ PriorityList.setInitialPriorities = function(handleResult) {
 };
 
 PriorityList.addPriority = function(priority, handleUpdatedList) {
-    chrome.storage.sync.get(PRIORITIES_KEY, function(result) {
+    chrome.storage.local.get(PRIORITIES_KEY, function(result) {
         var list = result[PRIORITIES_KEY];
         if (list === undefined || Object.keys(list).length === 0) { list = []; }
         var priorityList = new PriorityList(list);
@@ -103,6 +103,6 @@ PriorityList.addPriority = function(priority, handleUpdatedList) {
 
         var newVal = {};
         newVal[PRIORITIES_KEY] = priorityList.priorityArr;
-        chrome.storage.sync.set(newVal, handleUpdatedList(priorityList.priorityArr));
+        chrome.storage.local.set(newVal, handleUpdatedList(priorityList.priorityArr));
     });
 };

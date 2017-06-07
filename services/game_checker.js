@@ -51,20 +51,26 @@ function GameChecker() {
         this.getCurrentGame(function(gameId) {
             gameId = gameId[0];
             Game.findById(gameId, function(game) {
-                console.log("GAME", game);
                 if (game.isInCommercialBreak()) {
                     // Testing function
                     this.getCurrentGameIds(function (ids) {
-                        console.log("IDS TO CHANGE", ids);
                         ids = ids[0];
-                        for(var i = 0; i < ids.length; i++) {
-                            if (gameId !== ids[i]) {
-                                console.log("GAME TO CHANGE TO", gameId);
-                                this.changeGame(ids[i]);
-                                break;
-                            }
-                        }
+                        var changer = new GameChanger(ids);
+                        var next = changer.getNextPriority();
+                        next.then(function(next) {
+                            this.changeGame(next.id);
+                        }.bind(this));
+                        // ids = ids[0];
+                        // for(var i = 0; i < ids.length; i++) {
+                        //     if (gameId !== ids[i]) {
+                        //         console.log("GAME TO CHANGE TO", gameId);
+                        //         this.changeGame(ids[i]);
+                        //         break;
+                        //     }
+                        // }
                     }.bind(this));
+                } else {
+                    console.log("STATUS", game.status);
                 }
             }.bind(this));
         }.bind(this));
@@ -92,7 +98,7 @@ function GameChecker() {
         };
 
         var timeObj = {
-            month: toTwoDigit(date.getUTCMonth().toString() + 1),
+            month: toTwoDigit((date.getUTCMonth() + 1).toString()),
             day: toTwoDigit(date.getUTCDate().toString()),
             hour: toTwoDigit(date.getUTCHours().toString()),
             min: toTwoDigit(date.getUTCMinutes().toString()),
@@ -112,7 +118,7 @@ function GameChecker() {
             url: this._getServiceUrl(gameId, new Date()),
             success: handleGameData,
             error: function(err) {
-                console.error(err);
+                console.warn(err);
             }
         });
     };
