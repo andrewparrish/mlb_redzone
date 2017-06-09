@@ -50,28 +50,13 @@ function GameChecker() {
     this.checkForGameChange = function() {
         this.getCurrentGame(function(gameId) {
             gameId = gameId[0];
-            Game.findById(gameId, function(game) {
-                if (game.isInCommercialBreak()) {
-                    // Testing function
-                    this.getCurrentGameIds(function (ids) {
-                        ids = ids[0];
-                        var changer = new GameChanger(ids);
-                        var next = changer.getNextPriority();
-                        next.then(function(next) {
-                            this.changeGame(next.id);
-                        }.bind(this));
-                        // ids = ids[0];
-                        // for(var i = 0; i < ids.length; i++) {
-                        //     if (gameId !== ids[i]) {
-                        //         console.log("GAME TO CHANGE TO", gameId);
-                        //         this.changeGame(ids[i]);
-                        //         break;
-                        //     }
-                        // }
-                    }.bind(this));
-                } else {
-                    console.log("STATUS", game.status);
-                }
+            this.getCurrentGameIds(function (ids) {
+                ids = ids[0];
+                var changer = new GameChanger(gameId, ids);
+                var next = changer.getNextPriority();
+                next.then(function(next) {
+                    if(next) { this.changeGame(next.id); }
+                }.bind(this));
             }.bind(this));
         }.bind(this));
     }.bind(this);

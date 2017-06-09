@@ -2,7 +2,8 @@
  * Created by andrewparrish on 6/6/17.
  */
 
-function GameChanger(gameIds) {
+function GameChanger(currGameId, gameIds) {
+    this.currGameId = currGameId;
     this.gameIds = gameIds;
 
     this.getPriorities = function() {
@@ -32,14 +33,12 @@ function GameChanger(gameIds) {
             });
 
             return this.getPriorities().then(function(priorities) {
-                console.log(priorities);
                 for(var i = 0; i < priorities.length; i++) {
-                    console.log("GAME", gameHash[priorities[i].val]);
-                    if (!gameHash[priorities[i].val].isInCommercialBreak()) {
+                    if (!gameHash[priorities[i].val].isInCommercialBreak() && priorities[i].val !== this.currGameId) {
                        return gameHash[priorities[i].val];
                     }
                 }
-            });
+            }.bind(this));
         }.bind(this));
     };
 
