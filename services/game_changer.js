@@ -28,14 +28,17 @@ function GameChanger(currGameId, gameIds) {
         return Promise.all(promises).then(function(games) {
             var gameHash = {};
             games.forEach(function(game) {
-               gameHash[game.teamOne] = game;
-               gameHash[game.teamTwo] = game;
+                gameHash[game.teamOne] = game;
+                gameHash[game.teamTwo] = game;
             });
 
             return this.getPriorities().then(function(priorities) {
                 for(var i = 0; i < priorities.length; i++) {
                     if (!gameHash[priorities[i].val].isInCommercialBreak() && priorities[i].val !== this.currGameId) {
-                       return gameHash[priorities[i].val];
+                        gameHash[priorities[i].val].isBlackedOut().then(function(blackout) {
+                            if(!blackout) { return gameHash[priorities[i].val]; }
+
+                        });
                     }
                 }
             }.bind(this));

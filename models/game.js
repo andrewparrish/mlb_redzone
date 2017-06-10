@@ -21,6 +21,29 @@ function Game(id, teamOne, teamTwo, status) {
         }
     };
 
+    this.getTeams = function() {
+        var teams = [
+            Team.findById(this.teamOne),
+            Team.findById(this.teamTwo)
+        ];
+
+        return Promise.all(teams);
+    };
+
+    this.isBlackedOut = function() {
+        return new Promise(function(resolve, reject) {
+            this.getTeams().then(function(teams) {
+                var blackouts = teams.map(function(team) {
+                    return team.blackout;
+                });
+
+                resolve(blackouts.indexOf(true) !== -1);
+            }).rescue(function(err) {
+                reject(err);  
+            });
+        }.bind(this));
+    };
+
     this.isInCommercialBreak = function() {
         return COMMERCIAL_STATUSES.indexOf(this.status) !== -1;
     };

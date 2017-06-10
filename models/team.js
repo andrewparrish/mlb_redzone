@@ -8,11 +8,11 @@ function Team(id, displayName, blackout) {
     this.blackout = blackout || false;
 
     this._teamAsHash = function() {
-      return {
-          id: this.id,
-          displayName: this.displayName,
-          blackout: this.blackout
-      };
+        return {
+            id: this.id,
+            displayName: this.displayName,
+            blackout: this.blackout
+        };
     };
 
     this.saveTeam = function(afterSave) {
@@ -23,12 +23,18 @@ function Team(id, displayName, blackout) {
 }
 
 Team.findById = function(id, onSuccess, onFailure) {
-    chrome.storage.local.get(id, function(result) {
-        var team = result[id];
-        if (team === undefined) {
-            if (onFailure) { onFailure() }
-        } else {
-            if (onSuccess) { onSuccess(team) }
-        }
+    return new Promise(function(resolve, reject) {
+        chrome.storage.local.get(id, function(result) {
+            var team = result[id];
+            if (team === undefined) {
+                if (onFailure) { onFailure() }
+
+                reject(team);
+            } else {
+                if (onSuccess) { onSuccess(team) }
+
+                resolve(team);
+            }
+        });
     });
 };
