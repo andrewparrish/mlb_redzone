@@ -13,7 +13,7 @@ function GameChecker() {
     this.setInitialPriorities();
 
     this._getCurrentTab = function(handleTab) {
-        chrome.tabs.query({ url: '*://m.mlb.com/*' }, handleTab);
+        chrome.tabs.query({ url: '*://www.mlb.com/tv/*' }, handleTab);
     };
 
     this.getCurrentGame = function(handleGame) {
@@ -63,6 +63,7 @@ function GameChecker() {
 
     this.updateGame = function(msg) {
         var gameData = this._parseGameData(msg);
+        console.log(gameData);
         var game = new Game(gameData.id, gameData.teamOne, gameData.teamTwo, gameData.status);
         game.saveGame();
     }.bind(this);

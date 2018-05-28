@@ -31,6 +31,7 @@ function GameChanger(currGameId, gameIds) {
                 gameHash[game.teamOne] = game;
                 gameHash[game.teamTwo] = game;
             });
+            console.log(gameHash);
 
             return this.getPriorities().then(function(priorities) {
                 for(var i = 0; i < priorities.length; i++) {
