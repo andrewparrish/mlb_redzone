@@ -38,7 +38,8 @@ function Game(id, teamOne, teamTwo, status) {
                 });
 
                 resolve(blackouts.indexOf(true) !== -1);
-            }).rescue(function(err) {
+            }).catch(function(err) {
+                console.warn(err);
                 reject(err);  
             });
         }.bind(this));

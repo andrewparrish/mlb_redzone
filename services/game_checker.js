@@ -30,9 +30,8 @@ function GameChecker() {
 
     this.updateCurrentGames = function(afterUpdate) {
         this.getCurrentGameIds(function(ids) {
-            ids[0].map(function(id) {
-                return this._getGameData(id, this.updateGame);
-            }.bind(this));
+            console.log('IDS', ids[0]);
+            this._getAllGameData(this.updateGames);
             if (afterUpdate) { afterUpdate() }
         }.bind(this));
     };
@@ -61,6 +60,13 @@ function GameChecker() {
         }.bind(this));
     }.bind(this);
 
+    this.updateGames = function(msg) {
+      this._parseGamesData(msg).map(function(game) {
+          var game = new Game(game.id, game.teamOne, game.teamTwo, game.status);
+          game.saveGame();
+      });
+    }.bind(this);
+
     this.updateGame = function(msg) {
         var gameData = this._parseGameData(msg);
         console.log(gameData);
@@ -71,7 +77,7 @@ function GameChecker() {
     this._getServiceUrl = function(gameId, date) {
         var timeObj = this._parseTimeToObj(date);
         return "http://lwsa.mlb.com/tfs/tfs?file=/components/game/mlb/year_" +
-            timeObj.year + "/month_" + timeObj.month + "/day_" + timeObj.day +
+        timeObj.year + "/month_" + timeObj.month + "/day_" + timeObj.day +
             "/gid_" + gameId + "/plays.xml&timecode=" + timeObj.timecode;
     };
 
@@ -95,10 +101,11 @@ function GameChecker() {
         timeObj.timecode = "" + date.getFullYear() + timeObj.month +
             timeObj.day + "_"+ timeObj.hour + timeObj.min + timeObj.sec;
 
-        return timeObj;
+            return timeObj;
     };
 
     this._getGameData = function(gameId, handleGameData) {
+        return;
         $.ajax({
             type: "GET",
             url: this._getServiceUrl(gameId, new Date()),
@@ -109,8 +116,37 @@ function GameChecker() {
         });
     };
 
+    this._getAllGameData = function(handleGameData) {
+        $.ajax({
+            type: 'GET',
+            url: this._getAllGamesUrl(new Date()),
+            success: handleGameData,
+            error: function(err) {
+                console.warn(err);
+            }
+        })
+    };
+
+    this._getAllGamesUrl = function(date) {
+        var timeObj = this._parseTimeToObj(date);
+        return "https://statsapi.mlb.com/api/v1/schedule?language=&sportId=1&date=" +
+            timeObj.month + "/" + timeObj.day + "/" + timeObj.year + "&sortBy=gameDate&hydrate=game(content(summary,media(epg))),linescore(runners),flags,team,review";
+    };
+
     this._parseGameStatus = function(data) {
         return $(data).find('game').attr('inning_state');
+    };
+
+    this._parseGamesData = function(data) {
+      return data.dates[0].games.map(function(game) {
+          console.log(game);
+          return {
+              id: game.gamePk.toString(),
+              teamOne: game.teams.away.team.fileCode,
+              teamTwo: game.teams.home.team.fileCode,
+              status: game.status.detailedState
+          }
+      });
     };
 
     this._parseGameData = function(data) {

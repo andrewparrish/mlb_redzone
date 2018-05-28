@@ -6,7 +6,7 @@ function uniqValues(val, index, self) {
     return self.indexOf(val) === index;
 }
 
-var games = document.getElementsByClassName('game during inprogress');
+var games = document.getElementsByClassName('series-game game');
 console.log("GAMES", games);
 var arr = Object.keys(games).map(function(key) {
    return games[key];
