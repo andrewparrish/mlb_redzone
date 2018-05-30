@@ -2,6 +2,9 @@
  * Created by andrewparrish on 5/20/17.
  */
 function GameChecker() {
+
+    const BASE_URL = "https://statsapi.mlb.com/api/v1";
+
     this.priorities = [];
 
     this.setInitialPriorities = function() {
@@ -30,7 +33,6 @@ function GameChecker() {
 
     this.updateCurrentGames = function(afterUpdate) {
         this.getCurrentGameIds(function(ids) {
-            console.log('IDS', ids[0]);
             this._getAllGameData(this.updateGames);
             if (afterUpdate) { afterUpdate() }
         }.bind(this));
@@ -104,8 +106,18 @@ function GameChecker() {
             return timeObj;
     };
 
+    this._defaultErrorHandler = function(err) { console.log(err) };
+
+    this._getData = function(url, handleSuccess, handleError, method) {
+        $.ajax({
+            type: method,
+            url: url,
+            success: handleSuccess,
+            error: handleError
+        });
+    };
+
     this._getGameData = function(gameId, handleGameData) {
-        return;
         $.ajax({
             type: "GET",
             url: this._getServiceUrl(gameId, new Date()),
@@ -117,20 +129,13 @@ function GameChecker() {
     };
 
     this._getAllGameData = function(handleGameData) {
-        $.ajax({
-            type: 'GET',
-            url: this._getAllGamesUrl(new Date()),
-            success: handleGameData,
-            error: function(err) {
-                console.warn(err);
-            }
-        })
+        this._getData(this._getAllGamesUrl(new Date()), handleGameData, this._defaultErrorHandler, 'GET');
     };
 
     this._getAllGamesUrl = function(date) {
         var timeObj = this._parseTimeToObj(date);
-        return "https://statsapi.mlb.com/api/v1/schedule?language=&sportId=1&date=" +
-            timeObj.month + "/" + timeObj.day + "/" + timeObj.year + "&sortBy=gameDate&hydrate=game(content(summary,media(epg))),linescore(runners),flags,team,review";
+        return BASE_URL + "/schedule?language=&sportId=1&date=" + timeObj.month + "/" + timeObj.day + "/" + timeObj.year
+                        + "&sortBy=gameDate&hydrate=game(content(summary,media(epg))),linescore(runners),flags,team,review";
     };
 
     this._parseGameStatus = function(data) {
@@ -138,7 +143,7 @@ function GameChecker() {
     };
 
     this._parseGamesData = function(data) {
-      return data.dates[0].games.map(function(game) {
+      return data.dates[0].games.filter(this._activeGame).map(function(game) {
           console.log(game);
           return {
               id: game.gamePk.toString(),
@@ -147,6 +152,10 @@ function GameChecker() {
               status: game.status.detailedState
           }
       });
+    };
+
+    this._activeGame = function(gameData) {
+        return gameData.status.detailedState == 'In Progress';        
     };
 
     this._parseGameData = function(data) {
