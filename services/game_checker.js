@@ -3,7 +3,7 @@
  */
 function GameChecker() {
 
-    const BASE_URL = "https://statsapi.mlb.com/api/v1";
+    const BASE_URL = "https://statsapi.mlb.com";
 
     this.priorities = [];
 
@@ -64,14 +64,16 @@ function GameChecker() {
 
     this.updateGames = function(msg) {
       this._parseGamesData(msg).map(function(game) {
+          console.log(game);
+          console.log(this._gameFeedUrl(game.link));
+          this._getData(this._gameFeedUrl(game.link), function(msg) { console.log(msg) }, this._defaultErrorHandler, 'GET');
           var game = new Game(game.id, game.teamOne, game.teamTwo, game.status);
           game.saveGame();
-      });
+      }.bind(this));
     }.bind(this);
 
     this.updateGame = function(msg) {
         var gameData = this._parseGameData(msg);
-        console.log(gameData);
         var game = new Game(gameData.id, gameData.teamOne, gameData.teamTwo, gameData.status);
         game.saveGame();
     }.bind(this);
@@ -132,9 +134,11 @@ function GameChecker() {
         this._getData(this._getAllGamesUrl(new Date()), handleGameData, this._defaultErrorHandler, 'GET');
     };
 
+    this._gameFeedUrl = function(link) { return BASE_URL + link; };
+
     this._getAllGamesUrl = function(date) {
         var timeObj = this._parseTimeToObj(date);
-        return BASE_URL + "/schedule?language=&sportId=1&date=" + timeObj.month + "/" + timeObj.day + "/" + timeObj.year
+        return BASE_URL + "/api/v1/schedule?language=&sportId=1&date=" + timeObj.month + "/" + timeObj.day + "/" + timeObj.year
                         + "&sortBy=gameDate&hydrate=game(content(summary,media(epg))),linescore(runners),flags,team,review";
     };
 
@@ -149,7 +153,8 @@ function GameChecker() {
               id: game.gamePk.toString(),
               teamOne: game.teams.away.team.fileCode,
               teamTwo: game.teams.home.team.fileCode,
-              status: game.status.detailedState
+              status: game.status.detailedState,
+              link: game.link
           }
       });
     };
