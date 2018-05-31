@@ -32,10 +32,8 @@ function GameChecker() {
     };
 
     this.updateCurrentGames = function(afterUpdate) {
-        this.getCurrentGameIds(function(ids) {
-            this._getAllGameData(this.updateGames);
-            if (afterUpdate) { afterUpdate() }
-        }.bind(this));
+        this._getAllGameData(this.updateGames);
+        if (afterUpdate) { afterUpdate() }
     };
 
     this.changeGame = function(gameId) {
@@ -63,27 +61,17 @@ function GameChecker() {
     }.bind(this);
 
     this.updateGames = function(msg) {
-      this._parseGamesData(msg).map(function(game) {
-          console.log(game);
-          console.log(this._gameFeedUrl(game.link));
-          this._getData(this._gameFeedUrl(game.link), function(msg) { console.log(msg) }, this._defaultErrorHandler, 'GET');
-          var game = new Game(game.id, game.teamOne, game.teamTwo, game.status);
-          game.saveGame();
-      }.bind(this));
+      this._parseGamesData(msg).map(this.mergeGameData);
     }.bind(this);
 
-    this.updateGame = function(msg) {
-        var gameData = this._parseGameData(msg);
-        var game = new Game(gameData.id, gameData.teamOne, gameData.teamTwo, gameData.status);
-        game.saveGame();
+    this.mergeGameData = function(gameData) {
+        this._getData(this._gameFeedUrl(gameData.link), function(specificGameData) {
+            console.log(specificGameData);
+            gameData.alerts = specificGameData.gameData.alerts;
+            var game = new Game(gameData);
+            game.saveGame();
+        }, this._defaultErrorHandler, 'GET');
     }.bind(this);
-
-    this._getServiceUrl = function(gameId, date) {
-        var timeObj = this._parseTimeToObj(date);
-        return "http://lwsa.mlb.com/tfs/tfs?file=/components/game/mlb/year_" +
-        timeObj.year + "/month_" + timeObj.month + "/day_" + timeObj.day +
-            "/gid_" + gameId + "/plays.xml&timecode=" + timeObj.timecode;
-    };
 
     this._parseTimeToObj = function(date) {
         var toTwoDigit = function(str) {
@@ -119,17 +107,6 @@ function GameChecker() {
         });
     };
 
-    this._getGameData = function(gameId, handleGameData) {
-        $.ajax({
-            type: "GET",
-            url: this._getServiceUrl(gameId, new Date()),
-            success: handleGameData,
-            error: function(err) {
-                console.warn(err);
-            }
-        });
-    };
-
     this._getAllGameData = function(handleGameData) {
         this._getData(this._getAllGamesUrl(new Date()), handleGameData, this._defaultErrorHandler, 'GET');
     };
@@ -140,10 +117,6 @@ function GameChecker() {
         var timeObj = this._parseTimeToObj(date);
         return BASE_URL + "/api/v1/schedule?language=&sportId=1&date=" + timeObj.month + "/" + timeObj.day + "/" + timeObj.year
                         + "&sortBy=gameDate&hydrate=game(content(summary,media(epg))),linescore(runners),flags,team,review";
-    };
-
-    this._parseGameStatus = function(data) {
-        return $(data).find('game').attr('inning_state');
     };
 
     this._parseGamesData = function(data) {
@@ -162,15 +135,4 @@ function GameChecker() {
     this._activeGame = function(gameData) {
         return gameData.status.detailedState == 'In Progress';        
     };
-
-    this._parseGameData = function(data) {
-        var id  = $(data).find('game').attr('id');
-        var parsed = /\d+_\d+_\d+_(\w+)mlb_(\w+)mlb/.exec(id);
-        return {
-            id: id,
-            teamOne: parsed[1],
-            teamTwo: parsed[2],
-            status: this._parseGameStatus(data)
-        }
-    }
 }

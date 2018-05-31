@@ -24,14 +24,14 @@ describe('game', function() {
 
     describe('instance methods', function() {
         it('should set its id', function(done) {
-            var game = new Game();
+            var game = new Game({ id: '1' });
             expect(game.id).to.not.equal(null);
             done();
         });
 
         it('should identify its in commercial', function(done) {
-            expect(new Game(null, null, null, 'Top').isInCommercialBreak()).to.equal(false);
-            expect(new Game(null, null, null, 'Middle').isInCommercialBreak()).to.equal(true);
+            expect(new Game({ status: 'Top' }).isInCommercialBreak()).to.equal(false);
+            expect(new Game({ status: 'Middle' }).isInCommercialBreak()).to.equal(true);
             done();
         });
 

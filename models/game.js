@@ -2,12 +2,13 @@
  * Created by andrewparrish on 5/24/17.
  */
 
-function Game(id, teamOne, teamTwo, status) {
-    this.teamOne = teamOne;
-    this.teamTwo = teamTwo;
-    this.status = status;
+function Game(gameData) {
+    this.teamOne = gameData.teamOne;
+    this.teamTwo = gameData.teamTwo;
+    this.status = gameData.status;
     this.lastUpdated = new Date();
-    this.id = id;
+    this.id = gameData.id;
+    this.alerts = gameData.alerts;
 
     const COMMERCIAL_STATUSES = ["Middle", "End"];
 
@@ -50,8 +51,10 @@ function Game(id, teamOne, teamTwo, status) {
     };
 
     this.saveGame = function() {
+        console.log("HERE");
         var data = {};
-        data[this.id] = this._gameAsHash();
+        data[this.id.toString()] = this._gameAsHash();
+        console.log('storage', chrome.storage.local);
         return chrome.storage.local.set(data, function(result) {
             return result;
         });
@@ -65,7 +68,7 @@ function Game(id, teamOne, teamTwo, status) {
 }
 
 Game.findById = function(id, onSuccess, onFailure) {
-    chrome.storage.local.get(id, function(result) {
+    chrome.storage.local.get([id.toString()], function(result) {
         var data = result[id];
         if (data === undefined) {
             if (onFailure) { onFailure('Could not find game.'); }
