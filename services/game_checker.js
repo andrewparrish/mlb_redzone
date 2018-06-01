@@ -66,9 +66,9 @@ function GameChecker() {
 
     this.mergeGameData = function(gameData) {
         this._getData(this._gameFeedUrl(gameData.link), function(specificGameData) {
-            console.log(specificGameData);
             gameData.alerts = specificGameData.gameData.alerts;
             var game = new Game(gameData);
+            console.log('Game', game);
             game.saveGame();
         }, this._defaultErrorHandler, 'GET');
     }.bind(this);
@@ -82,10 +82,10 @@ function GameChecker() {
         };
 
         var timeObj = {
-            month: toTwoDigit((date.getUTCMonth() + 1).toString()),
-            day: toTwoDigit(date.getUTCDate().toString()),
-            hour: toTwoDigit(date.getUTCHours().toString()),
-            min: toTwoDigit(date.getUTCMinutes().toString()),
+            month: toTwoDigit((date.getMonth() + 1).toString()),
+            day: toTwoDigit(date.getDate().toString()),
+            hour: toTwoDigit(date.getHours().toString()),
+            min: toTwoDigit(date.getMinutes().toString()),
             sec: toTwoDigit(Math.round(date.getSeconds() / 10) * 10),
             year: date.getFullYear()
         };
@@ -121,7 +121,6 @@ function GameChecker() {
 
     this._parseGamesData = function(data) {
       return data.dates[0].games.filter(this._activeGame).map(function(game) {
-          console.log(game);
           return {
               id: game.gamePk.toString(),
               teamOne: game.teams.away.team.fileCode,
@@ -133,6 +132,6 @@ function GameChecker() {
     };
 
     this._activeGame = function(gameData) {
-        return gameData.status.detailedState == 'In Progress';        
+        return gameData.status.detailedState == 'In Progress';
     };
 }

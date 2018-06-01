@@ -10,7 +10,7 @@ function Game(gameData) {
     this.id = gameData.id;
     this.alerts = gameData.alerts;
 
-    const COMMERCIAL_STATUSES = ["Middle", "End"];
+    const COMMERCIAL_STATUSES = ["Middle", "End", "end_of_half_inning"];
 
     this._gameAsHash = function() {
         return {
@@ -47,14 +47,12 @@ function Game(gameData) {
     };
 
     this.isInCommercialBreak = function() {
-        return COMMERCIAL_STATUSES.indexOf(this.status) !== -1;
+        return this.alerts.length > 0 && COMMERCIAL_STATUSES.indexOf(this.alerts[0].category) !== -1;
     };
 
     this.saveGame = function() {
-        console.log("HERE");
         var data = {};
         data[this.id.toString()] = this._gameAsHash();
-        console.log('storage', chrome.storage.local);
         return chrome.storage.local.set(data, function(result) {
             return result;
         });
@@ -65,6 +63,7 @@ function Game(gameData) {
         this.lastUpdated = new Date();
         return this;
     };
+
 }
 
 Game.findById = function(id, onSuccess, onFailure) {
