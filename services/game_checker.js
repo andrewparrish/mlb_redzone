@@ -67,8 +67,8 @@ function GameChecker() {
     this.mergeGameData = function(gameData) {
         this._getData(this._gameFeedUrl(gameData.link), function(specificGameData) {
             gameData.alerts = specificGameData.gameData.alerts;
+            console.log('gameData', gameData);
             var game = new Game(gameData);
-            console.log('Game', game);
             game.saveGame();
         }, this._defaultErrorHandler, 'GET');
     }.bind(this);

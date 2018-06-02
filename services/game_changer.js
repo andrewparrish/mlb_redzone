@@ -26,6 +26,7 @@ function GameChanger(currGameId, gameIds) {
         }.bind(this));
 
         return Promise.all(promises).then(function(games) {
+            console.log('games', games);
             var gameHash = {};
             games.forEach(function(game) {
                 gameHash[game.teamOne] = game;
@@ -33,6 +34,7 @@ function GameChanger(currGameId, gameIds) {
             });
 
             return this.getPriorities().then(function(priorities) {
+                console.log(priorities);
                 for(var i = 0; i < priorities.length; i++) {
                     if (!gameHash[priorities[i].val].isInCommercialBreak() && priorities[i].val !== this.currGameId) {
                         gameHash[priorities[i].val].isBlackedOut().then(function(blackout) {

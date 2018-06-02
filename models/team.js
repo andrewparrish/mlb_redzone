@@ -18,13 +18,15 @@ function Team(id, displayName, blackout) {
     this.saveTeam = function(afterSave) {
         var data = {};
         data[this.id] = this._teamAsHash();
+        console.log('TEAM DATA', data);
         chrome.storage.local.set(data, afterSave);
     }.bind(this);
 }
 
 Team.findById = function(id, onSuccess, onFailure) {
     return new Promise(function(resolve, reject) {
-        chrome.storage.local.get(id, function(result) {
+        chrome.storage.local.get([id], function(result) {
+            console.log('team', result);
             var team = result[id];
             if (team === undefined) {
                 if (onFailure) { onFailure() }

@@ -47,7 +47,7 @@ function Game(gameData) {
     };
 
     this.isInCommercialBreak = function() {
-        return this.alerts.length > 0 && COMMERCIAL_STATUSES.indexOf(this.alerts[0].category) !== -1;
+        return this.alerts && this.alerts.length > 0 && COMMERCIAL_STATUSES.indexOf(this.alerts[0].category) !== -1;
     };
 
     this.saveGame = function() {
@@ -73,7 +73,7 @@ Game.findById = function(id, onSuccess, onFailure) {
             if (onFailure) { onFailure('Could not find game.'); }
         } else {
             if (onSuccess) {
-                var game = new Game(data.id, data.teamOne, data.teamTwo, data.status);
+                var game = new Game(data);
                 onSuccess(game)
             }
         }
