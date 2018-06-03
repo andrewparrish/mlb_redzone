@@ -9,6 +9,7 @@ function Game(gameData) {
     this.lastUpdated = new Date();
     this.id = gameData.id;
     this.alerts = gameData.alerts;
+    this.link = gameData.link;
 
     const COMMERCIAL_STATUSES = ["Middle", "End", "end_of_half_inning"];
 
@@ -18,7 +19,9 @@ function Game(gameData) {
             teamTwo: this.teamTwo,
             status: this.status,
             lastUpdated: this.lastUpdated,
-            id: this.id
+            id: this.id,
+            link: this.link,
+            alerts: this.alerts
         }
     };
 

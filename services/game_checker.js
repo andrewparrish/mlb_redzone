@@ -2,7 +2,6 @@
  * Created by andrewparrish on 5/20/17.
  */
 function GameChecker() {
-
     const BASE_URL = "https://statsapi.mlb.com";
 
     this.priorities = [];
@@ -18,7 +17,6 @@ function GameChecker() {
         chrome.tabs.query({ url: '*://www.mlb.com/tv/*' }, handleTab);
     };
 
-
     this.isMonitorActive = function() {
         this._getCurrentTab(function(tabs) {
             if (tabs && tabs.length == 0) {
@@ -26,20 +24,6 @@ function GameChecker() {
             }
         }.bind(this));
     }.bind(this);
-
-    this.setInitialPriorities();
-    this.isMonitorActive();
-
-    chrome.tabs.onCreated.addListener(this.isMonitorActive);
-
-    chrome.tabs.onUpdated.addListener(this.isMonitorActive);
-
-    setInterval(function() {
-        console.log('Tick');
-        if(this.active) {
-            this.updateCurrentGames(this.checkForGameChange);
-        }
-    }.bind(this), 10000);
 
     this.getCurrentGame = function(handleGame) {
         this._getCurrentTab(function(results) {
@@ -56,6 +40,18 @@ function GameChecker() {
     this.updateCurrentGames = function(afterUpdate) {
         this._getAllGameData(this.updateGames);
         if (afterUpdate) { afterUpdate() }
+    };
+
+    this.updateCurrentGame = function() {
+        this.getCurrentGame(function(gameId) {
+            console.log('gameId', gameId);
+            gameId = gameId[0];
+            Game.findById(gameId, function(game) {
+                this.mergeGameData(game);
+            }.bind(this));
+        }, function(err) {
+            console.warn('Err', err);
+        });
     };
 
     this.changeGame = function(gameId) {
@@ -156,4 +152,24 @@ function GameChecker() {
     this._activeGame = function(gameData) {
         return gameData.status.detailedState == 'In Progress';
     };
+
+    this.setInitialPriorities();
+    this.isMonitorActive();
+    this.updateCurrentGames();
+
+    chrome.tabs.onCreated.addListener(this.isMonitorActive);
+
+    chrome.tabs.onUpdated.addListener(this.isMonitorActive);
+
+    setInterval(function() {
+        console.log('Tick');
+        console.log(this);
+        if(this.active) {
+            console.log('Tock');
+            // this.updateCurrentGames(this.checkForGameChange);
+            this.updateCurrentGame();
+        }
+    }.bind(this), 10000);
+
+
 }
