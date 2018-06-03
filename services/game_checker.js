@@ -6,6 +6,7 @@ function GameChecker() {
     const BASE_URL = "https://statsapi.mlb.com";
 
     this.priorities = [];
+    this.active = true;
 
     this.setInitialPriorities = function() {
         PriorityList.setInitialPriorities(function(list) {
@@ -13,11 +14,32 @@ function GameChecker() {
         }.bind(this));
     };
 
-    this.setInitialPriorities();
-
     this._getCurrentTab = function(handleTab) {
         chrome.tabs.query({ url: '*://www.mlb.com/tv/*' }, handleTab);
     };
+
+
+    this.isMonitorActive = function() {
+        this._getCurrentTab(function(tabs) {
+            if (tabs && tabs.length == 0) {
+                this.active = false;
+            }
+        }.bind(this));
+    }.bind(this);
+
+    this.setInitialPriorities();
+    this.isMonitorActive();
+
+    chrome.tabs.onCreated.addListener(this.isMonitorActive);
+
+    chrome.tabs.onUpdated.addListener(this.isMonitorActive);
+
+    setInterval(function() {
+        console.log('Tick');
+        if(this.active) {
+            this.updateCurrentGames(this.checkForGameChange);
+        }
+    }.bind(this), 10000);
 
     this.getCurrentGame = function(handleGame) {
         this._getCurrentTab(function(results) {
@@ -61,7 +83,7 @@ function GameChecker() {
     }.bind(this);
 
     this.updateGames = function(msg) {
-      this._parseGamesData(msg).map(this.mergeGameData);
+        this._parseGamesData(msg).map(this.mergeGameData);
     }.bind(this);
 
     this.mergeGameData = function(gameData) {
@@ -93,7 +115,7 @@ function GameChecker() {
         timeObj.timecode = "" + date.getFullYear() + timeObj.month +
             timeObj.day + "_"+ timeObj.hour + timeObj.min + timeObj.sec;
 
-            return timeObj;
+        return timeObj;
     };
 
     this._defaultErrorHandler = function(err) { console.log(err) };
@@ -116,19 +138,19 @@ function GameChecker() {
     this._getAllGamesUrl = function(date) {
         var timeObj = this._parseTimeToObj(date);
         return BASE_URL + "/api/v1/schedule?language=&sportId=1&date=" + timeObj.month + "/" + timeObj.day + "/" + timeObj.year
-                        + "&sortBy=gameDate&hydrate=game(content(summary,media(epg))),linescore(runners),flags,team,review";
+            + "&sortBy=gameDate&hydrate=game(content(summary,media(epg))),linescore(runners),flags,team,review";
     };
 
     this._parseGamesData = function(data) {
-      return data.dates[0].games.filter(this._activeGame).map(function(game) {
-          return {
-              id: game.gamePk.toString(),
-              teamOne: game.teams.away.team.fileCode,
-              teamTwo: game.teams.home.team.fileCode,
-              status: game.status.detailedState,
-              link: game.link
-          }
-      });
+        return data.dates[0].games.filter(this._activeGame).map(function(game) {
+            return {
+                id: game.gamePk.toString(),
+                teamOne: game.teams.away.team.fileCode,
+                teamTwo: game.teams.home.team.fileCode,
+                status: game.status.detailedState,
+                link: game.link
+            }
+        });
     };
 
     this._activeGame = function(gameData) {
