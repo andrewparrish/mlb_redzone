@@ -8,6 +8,9 @@
     "moment": "~2.22.0"
   },
   "devDependencies": {
+    "@types/jest": "^19.2.4",
+    "jest": "*",
+    "ts-jest": "*",
     "@types/chrome": "~0.0.63",
     "@types/jquery": "~3.3.1",
     "chai": "^3.5.0",
@@ -24,7 +27,7 @@
     "webpack-merge": "^4.1.2"
   },
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha",
+    "test": "jest",
     "watch": "webpack --config webpack/webpack.dev.js --watch",
     "build": "webpack --config webpack/webpack.prod.js"
   },
@@ -37,5 +40,23 @@
   "bugs": {
     "url": "https://github.com/andrewparrish/mlb_redzone/issues"
   },
-  "homepage": "https://github.com/andrewparrish/mlb_redzone#readme"
+  "homepage": "https://github.com/andrewparrish/mlb_redzone#readme",
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest"
+    },
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "tsconfig.json"
+      }
+    },
+    "testMatch": [
+      "**/test/*.+(ts|tsx)"
+    ]
+  }
 }

@@ -1,4 +1,4 @@
 import * as $ from 'jquery';
-import { Game } from './models/game';
+import { Game } from '../test/game';
 
 console.log('TEST', Game);
