@@ -44,12 +44,13 @@ function GameChecker() {
 
     this.updateCurrentGame = function() {
         this.getCurrentGame(function(gameId) {
-            console.log('gameId', gameId);
             gameId = gameId[0];
             Game.findById(gameId, function(game) {
-                this.mergeGameData(game);
+                this.mergeGameData(game).then(function(game) {
+                    this.checkForGameChange();
+                }.bind(this));
             }.bind(this));
-        }, function(err) {
+        }.bind(this), function(err) {
             console.warn('Err', err);
         });
     };
@@ -69,6 +70,7 @@ function GameChecker() {
             gameId = gameId[0];
             this.getCurrentGameIds(function (ids) {
                 ids = ids[0];
+                console.log(ids);
                 var changer = new GameChanger(gameId, ids);
                 var next = changer.getNextPriority();
                 next.then(function(next) {
@@ -83,12 +85,14 @@ function GameChecker() {
     }.bind(this);
 
     this.mergeGameData = function(gameData) {
-        this._getData(this._gameFeedUrl(gameData.link), function(specificGameData) {
-            gameData.alerts = specificGameData.gameData.alerts;
-            console.log('gameData', gameData);
-            var game = new Game(gameData);
-            game.saveGame();
-        }, this._defaultErrorHandler, 'GET');
+        return new Promise(function(resolve, _reject) {
+            this._getData(this._gameFeedUrl(gameData.link), function(specificGameData) {
+                // players: specificGameData.liveData.players.allPlayers
+                gameData.alerts = specificGameData.gameData.alerts;
+                var game = new Game(gameData);
+                game.saveGame(resolve);
+            }, this._defaultErrorHandler, 'GET');
+        }.bind(this));
     }.bind(this);
 
     this._parseTimeToObj = function(date) {

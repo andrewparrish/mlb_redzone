@@ -28,15 +28,17 @@ function GameChanger(currGameId, gameIds) {
         return Promise.all(promises).then(function(games) {
             console.log('games', games);
             var gameHash = {};
-            games.forEach(function(game) {
+            games.filter(function(game) { return !!game; }).forEach(function(game) {
                 gameHash[game.teamOne] = game;
                 gameHash[game.teamTwo] = game;
             });
 
             return this.getPriorities().then(function(priorities) {
-                console.log(priorities);
+                console.log('games', gameHash);
+                console.log('priorities', priorities);
                 for(var i = 0; i < priorities.length; i++) {
-                    if (!gameHash[priorities[i].val].isInCommercialBreak() && priorities[i].val !== this.currGameId) {
+                    var game = gameHash[priorities[i].val];
+                    if (game && !game.isInCommercialBreak() && priorities[i].val !== this.currGameId) {
                         gameHash[priorities[i].val].isBlackedOut().then(function(blackout) {
                             if(!blackout) { return gameHash[priorities[i].val]; }
 

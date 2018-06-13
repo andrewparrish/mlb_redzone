@@ -31,6 +31,8 @@ function Game(gameData) {
             Team.findById(this.teamTwo)
         ];
 
+        console.log('teams', teams);
+
         return Promise.all(teams);
     };
 
@@ -53,11 +55,12 @@ function Game(gameData) {
         return this.alerts && this.alerts.length > 0 && COMMERCIAL_STATUSES.indexOf(this.alerts[0].category) !== -1;
     };
 
-    this.saveGame = function() {
+    this.saveGame = function(resolve) {
         var data = {};
-        data[this.id.toString()] = this._gameAsHash();
-        return chrome.storage.local.set(data, function(result) {
-            return result;
+        var game = this._gameAsHash();
+        data[this.id.toString()] = game;
+        chrome.storage.local.set(data, function(_result) {
+            resolve(game);
         });
     }.bind(this);
 
@@ -73,6 +76,7 @@ Game.findById = function(id, onSuccess, onFailure) {
     chrome.storage.local.get([id.toString()], function(result) {
         var data = result[id];
         if (data === undefined) {
+            onSuccess(null);
             if (onFailure) { onFailure('Could not find game.'); }
         } else {
             if (onSuccess) {
