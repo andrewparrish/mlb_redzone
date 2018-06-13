@@ -27,8 +27,8 @@
     "persistent": true
   },
   "web_accessible_resources": [
-    "check_game.js",
-    "injections/scrape_current_games.js",
-    "injections/scrape_current_game.js"
+//    "check_game.js",
+//    "injections/scrape_current_games.js",
+//    "injections/scrape_current_game.js"
   ]
 }

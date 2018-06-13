@@ -2,3 +2,4 @@ node_modules/
 notes/
 .idea/
 *.swp
+dist/js/*
