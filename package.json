@@ -4,6 +4,7 @@
   "description": "Redzone for MLB fantasy ",
   "main": "check_game.js",
   "dependencies": {
+    "@types/sinon-chrome": "^2.2.4",
     "jquery": "~3.3.1",
     "moment": "~2.22.0"
   },
@@ -27,7 +28,7 @@
     "webpack-merge": "^4.1.2"
   },
   "scripts": {
-    "test": "jest",
+    "test": "jest --watch",
     "watch": "webpack --config webpack/webpack.dev.js --watch",
     "build": "webpack --config webpack/webpack.prod.js"
   },
@@ -56,7 +57,7 @@
       }
     },
     "testMatch": [
-      "**/test/*.+(ts|tsx)"
+      "**/src/**/(*.)+(spec|test).ts?(x)"
     ]
   }
 }
