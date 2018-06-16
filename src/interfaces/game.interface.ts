@@ -3,8 +3,8 @@ import { TeamInterface } from './team.interface';
 
 export interface GameInterface {
     id: Id,
-    teamOne?: TeamInterface;
-    teamTwo?: TeamInterface;
+    teamOne?: string;
+    teamTwo?: string;
     lastUpdated: string | Date;
     link: string;
 }

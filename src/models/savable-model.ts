@@ -5,7 +5,7 @@ export class SavableModel {
         return 'model';
     }
 
-    static class(): any {
+    static klass(): any {
         return this;
     }
 
@@ -15,7 +15,7 @@ export class SavableModel {
 
     static findById(id): Promise {
         const uniqueId = this.uniqueId(id);
-        const model = this.class();
+        const model = this.klass();
         return new Promise((resolve, _reject) => {
             chrome.storage.local.get(uniqueId, (result) => {
                 let data = result[uniqueId];

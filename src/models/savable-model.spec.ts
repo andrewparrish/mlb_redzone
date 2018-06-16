@@ -21,4 +21,24 @@ describe('SavableModel', () => {
             expect(model.asHash()).toEqual({});
        });
     });
+
+    describe('uniqueId', () => {
+        it('returns the corect id', () => {
+            expect(SavableModel.uniqueId(1)).toEqual('model_1');
+        });
+    });
+    
+    describe('findById', () => {
+        beforeAll(() => {
+            const data = { id: 'test' };
+            chrome.storage.local.get.yields({  [SavableModel.uniqueId('test')]: data 
+            });
+        });
+
+        it('returns the model', () => {
+            SavableModel.findById('test').then((result) => {
+                expect(result).toEqual(model);
+            });
+        });
+    });
 });
