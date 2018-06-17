@@ -1,11 +1,14 @@
 import { GameInterface } from '../interfaces/game.interface';
-import { TeamInterface } from '../interfaces/team.interface';
 import { SavableModel } from './savable-model';
 import { Team } from './team';
+import { Id } from '../types/id.type';
 
 export class Game extends SavableModel {
+    id: Id;
     teamOne: string;
     teamTwo: string;
+    link: string;
+    lastUpdated: Date | string;
 
     COMMERCIAL_STATUSES = ["end_of_half_inning"];
 
@@ -18,10 +21,10 @@ export class Game extends SavableModel {
         return 'game';
     }
 
-    getTeams(): Array<Team> {
+    getTeams(): Promise {
         return Promise.all([
-            Team.findById(this.teamOne);
-            Team.findById(this.teamTwo);
+            Team.findById(this.teamOne),
+            Team.findById(this.teamTwo)
         ])
     }
 

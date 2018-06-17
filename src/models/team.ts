@@ -6,4 +6,8 @@ export class Team extends SavableModel {
         super();
         Object.assign(this, teamData);
     }
+
+    static className(): string {
+        return 'team';
+    }
 }
