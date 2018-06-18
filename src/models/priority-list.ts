@@ -33,7 +33,7 @@ export class PriorityList {
         });
     }
 
-    lastNode(): boolean {
+    lastNode(): Node {
         let lastNode = this.head;
         while(lastNode && lastNode.next) {
             lastNode = lastNode.next;
@@ -51,7 +51,7 @@ export class PriorityList {
                 newNode.next = node;
             } else {
                 let nextNode = this.head.next;
-                while(nextNode && nextNode.val.priority < priority) {
+                while(nextNode && nextNode.val.priority < priority.priority) {
                     node = nextNode;
                     nextNode = node.next;
                 }
