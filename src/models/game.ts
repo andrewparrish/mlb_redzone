@@ -9,6 +9,7 @@ export class Game extends SavableModel {
     teamTwo: string;
     link: string;
     lastUpdated: Date | string;
+    alerts = [];
 
     COMMERCIAL_STATUSES = ["end_of_half_inning"];
 
@@ -19,6 +20,25 @@ export class Game extends SavableModel {
 
     static className(): string {
         return 'game';
+    }
+
+    isBlackedOut(): Promise {
+        return new Promise((resolve, reject) => {
+            this.getTeams().then((teams) => {
+                const blackedOut = teams.find((team) => {
+                   return !!team.blackout; 
+                });
+
+                resolve(!!blackedOut);
+            }).catch((err) => {
+                console.warn(err);
+                reject(err);
+            });
+        });
+    }
+
+    isInCommercialBreak(): boolean {
+        return this.alerts.length > 0 && this.COMMERCIAL_STATUSES.indexOf(this.alerts[0].category) !== -1;
     }
 
     getTeams(): Promise {
