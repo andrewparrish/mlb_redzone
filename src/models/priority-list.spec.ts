@@ -1,5 +1,7 @@
 import { PriorityList } from './priority-list';
 import { Node } from './node';
+import * as testChrome from 'sinon-chrome';
+declare const window: any;
 
 describe('PriorityList', () => {
     let priorityList: PriorityList;
@@ -11,6 +13,10 @@ describe('PriorityList', () => {
         priorityArrList = new PriorityList([node.val]);
     });
 
+    beforeAll(() => {
+        window.chrome = testChrome;
+    });
+
     describe('.new', () => {
         it('has an empty priorityArr by default', () => {
             expect(priorityList.priorityArr).toEqual([]);
@@ -18,6 +24,31 @@ describe('PriorityList', () => {
 
         it('can construct from a priority arr', () => {
             expect(priorityArrList.head).toEqual(node);
+        });
+    });
+
+    describe('.setInitialPriorities', () => {
+        beforeAll(() => {
+            testChrome.storage.local.get.yields({ 'priorities': priorityList });
+        });
+
+        it('returns the intial priorities', () => {
+            PriorityList.setInitialPriorities().then((list) => {
+                expect(list).toEqual(priorityList); 
+            });
+        });
+    });
+
+    describe('.addPriority', () => {
+        beforeAll(() => {
+            testChrome.storage.local.get.yields({});
+            testChrome.storage.local.set.yields({});
+        });
+
+        it('adds a priority', () => {
+            PriorityList.addPriority({ val: 'a' }).then((list) => {
+                expect(list).toEqual([{ val: 'a', priority: 1 }]);
+            });
         });
     });
 

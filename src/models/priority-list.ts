@@ -1,12 +1,42 @@
 import { Node } from './node';
+import { PriorityInterface } from './../interfaces/priority.interface';
 
 export class PriorityList {
+    static PRIORITIES_KEY = 'priorities';
+
     priorityArr: Array<Node>;
     head: Node = null;
 
     constructor(arr: Array<any> = []) {
         this.priorityArr = arr;
         this.buildList()
+    }
+
+    static setInitialPriorities(): Promise {
+        return new Promise((resolve, _reject) => {
+            chrome.storage.local.get(this.PRIORITIES_KEY, (result) => {
+                let list = result[this.PRIORITIES_KEY];
+                if(list === undefined || Object.keys(list).length === 0)  {
+                    list = [];
+                }
+
+                resolve(list);            
+            });
+        });
+    }
+
+    static addPriority(priority: PriorityInterface): Promise {
+        return new Promise((resolve, reject) => {
+            this.setInitialPriorities().then((priorityList) => {
+                let list = new PriorityList(priorityList);
+
+                list.addItem(priority);
+                let newList = { [this.PRIORITIES_KEY]: list };
+                chrome.storage.local.set(newList, (result) => {
+                    resolve(list.priorityArr);
+                });
+            });
+        });
     }
 
     buildArr(): void {
@@ -42,7 +72,7 @@ export class PriorityList {
         return lastNode;
     }
 
-    addItem(priority: any): PriorityList {
+    addItem(priority: PriorityInterface): PriorityList {
         const newNode = new Node(priority);
         if (this.head) {
             let node = this.head;
