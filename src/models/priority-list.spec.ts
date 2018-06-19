@@ -29,12 +29,12 @@ describe('PriorityList', () => {
 
     describe('.setInitialPriorities', () => {
         beforeAll(() => {
-            testChrome.storage.local.get.yields({ 'priorities': priorityList });
+            testChrome.storage.local.get.yields({ 'priorities': priorityList.priorityArr });
         });
 
         it('returns the intial priorities', () => {
             PriorityList.setInitialPriorities().then((list) => {
-                expect(list).toEqual(priorityList); 
+                expect(list).toEqual(priorityList.priorityArr); 
             });
         });
     });

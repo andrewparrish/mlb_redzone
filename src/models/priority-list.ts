@@ -12,7 +12,7 @@ export class PriorityList {
         this.buildList()
     }
 
-    static setInitialPriorities(): Promise {
+    static setInitialPriorities(): Promise<Array<PriorityInterface>> {
         return new Promise((resolve, _reject) => {
             chrome.storage.local.get(this.PRIORITIES_KEY, (result) => {
                 let list = result[this.PRIORITIES_KEY];
@@ -25,14 +25,14 @@ export class PriorityList {
         });
     }
 
-    static addPriority(priority: PriorityInterface): Promise {
+    static addPriority(priority: PriorityInterface): Promise<Array<PriorityInterface>> {
         return new Promise((resolve, reject) => {
             this.setInitialPriorities().then((priorityList) => {
                 let list = new PriorityList(priorityList);
 
                 list.addItem(priority);
-                let newList = { [this.PRIORITIES_KEY]: list };
-                chrome.storage.local.set(newList, (result) => {
+                let newList = { [this.PRIORITIES_KEY]: list.priorityArr };
+                chrome.storage.local.set(newList, () => {
                     resolve(list.priorityArr);
                 });
             });
