@@ -7,4 +7,5 @@ export interface GameInterface {
     teamTwo?: string;
     lastUpdated: string | Date;
     link: string;
+    alerts?: Array<any>;
 }

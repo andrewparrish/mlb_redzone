@@ -13,7 +13,7 @@ export class SavableModel {
         return `${this.className().toString()}_${id}`;
     }
 
-    static findById(id): Promise {
+    static findById(id): Promise<any> {
         const uniqueId = this.uniqueId(id);
         const model = this.klass();
         return new Promise((resolve, _reject) => {
@@ -32,7 +32,7 @@ export class SavableModel {
         return this;
     }
 
-    save(afterSave): void {
+    save(afterSave = null): void {
         chrome.storage.local.set(this.asHash(), afterSave);
     }
 }
