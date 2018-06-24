@@ -7,6 +7,10 @@ export class Team extends SavableModel {
         Object.assign(this, teamData);
     }
 
+    get blackout(): boolean {
+        return !!this.blackout;
+    }
+
     static className(): string {
         return 'team';
     }

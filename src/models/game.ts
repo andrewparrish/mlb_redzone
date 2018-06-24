@@ -22,7 +22,7 @@ export class Game extends SavableModel {
         return 'game';
     }
 
-    isBlackedOut(): Promise {
+    isBlackedOut(): Promise<boolean> {
         return new Promise((resolve, reject) => {
             this.getTeams().then((teams) => {
                 const blackedOut = teams.find((team) => {
@@ -41,7 +41,7 @@ export class Game extends SavableModel {
         return this.alerts.length > 0 && this.COMMERCIAL_STATUSES.indexOf(this.alerts[0].category) !== -1;
     }
 
-    getTeams(): Promise {
+    getTeams(): Promise<Array<Team>> {
         return Promise.all([
             Team.findById(this.teamOne),
             Team.findById(this.teamTwo)

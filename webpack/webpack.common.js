@@ -21,14 +21,14 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.tsx?$/,
+                test: /^(?!.*\.spec\.ts$).*\.ts$/,
                 use: 'ts-loader',
-                exclude: /node_modules/
+                exclude: [/node_modules/, /.+\.spec/]
             }
         ]
     },
     resolve: {
-        extensions: ['.ts', '.tsx', '.js']
+        extensions: ['.ts', '.tsx']
     },
     plugins: [
         // exclude locale files in moment

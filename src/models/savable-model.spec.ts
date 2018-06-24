@@ -31,7 +31,7 @@ describe('SavableModel', () => {
     describe('findById', () => {
         beforeAll(() => {
             const data = { id: 'test' };
-            chrome.storage.local.get.yields({  [SavableModel.uniqueId('test')]: data 
+            testChrome.storage.local.get.yields({  [SavableModel.uniqueId('test')]: data 
             });
         });
 

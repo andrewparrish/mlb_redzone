@@ -44,6 +44,7 @@ export class GameApiService extends BaseApiService {
     mergeGameData = (gameData: GameInterface) => {
         this.getGameSpecificData(gameData).then((specificData) => {
             gameData.alerts = specificData.gameData.alerts;
+            console.log('game', gameData);
             const game = new Game(gameData);
             game.save();
         });
