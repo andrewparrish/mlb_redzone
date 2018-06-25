@@ -28,6 +28,18 @@ export class SavableModel {
         });
     }
 
+    static findAllById(ids: Array<Id>): Promise<any> {
+        return Promise.all(ids.map(id => this.findById(id)));
+    }
+
+    static find(ids: Id | Array<Id>): Promise<any> {
+        if (typeof ids === "object") {
+            return this.findAllById(ids)
+        }  else { 
+            return this.findById(ids)
+        };
+    }
+
     asHash(): any {
         return this;
     }
