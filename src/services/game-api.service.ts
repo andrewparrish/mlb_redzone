@@ -41,12 +41,12 @@ export class GameApiService extends BaseApiService {
         this.parseGamesData(data).map(this.mergeGameData);
     };
 
-    mergeGameData = (gameData: GameInterface) => {
+    mergeGameData = (gameData: GameInterface, afterMerge = null) => {
         this.getGameSpecificData(gameData).then((specificData) => {
             gameData.alerts = specificData.gameData.alerts;
             console.log('game', gameData);
             const game = new Game(gameData);
-            game.save();
+            game.save(afterMerge);
         });
     }
 }

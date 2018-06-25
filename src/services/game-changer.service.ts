@@ -3,12 +3,12 @@ import { Game } from './../models/game';
 
 import { PriorityList } from './../models/priority-list';
 
-export class GameChanger {
-    currGameIds: Array<Id>;
+export class GameChangerService {
+    currGameId: Id;
     gameIds: Array<Id>;
 
-    constructor(currGameIds: Array<Id>, gameIds: Array<Id>) {
-        this.currGameIds = currGameIds;
+    constructor(currGameId: Id, gameIds: Array<Id>) {
+        this.currGameId = currGameId;
         this.gameIds = gameIds;
     }
 
@@ -18,7 +18,16 @@ export class GameChanger {
                 console.log('games', games);
                 const gameHash = this.forGameHash(games);
                 PriorityList.setInitialPriorities().then((priorities) => {
-
+                    console.log('games', gameHash);
+                    console.log('prioriteis', priorities);
+                    for(let i = 0; i < priorities.length; i++) {
+                        let game = gameHash[priorities[i].val];
+                        if (game && !game.isInCommercialBreak() && priorities[i].val !== this.currGameId) {
+                            gameHash[priorities[i].val].isBlackedOut().then(function(blackout) {
+                                if(!blackout) { return gameHash[priorities[i].val]; }
+                            });
+                        }
+                    }
                 });
             });
         });
