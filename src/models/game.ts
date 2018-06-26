@@ -26,7 +26,7 @@ export class Game extends SavableModel {
         return new Promise((resolve, reject) => {
             this.getTeams().then((teams) => {
                 const blackedOut = teams.find((team) => {
-                   return !!team.blackout; 
+                   return team.blackout; 
                 });
 
                 resolve(!!blackedOut);

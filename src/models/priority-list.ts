@@ -1,5 +1,12 @@
 import { Node } from './node';
+import { Id } from './../types/id.type';
 import { PriorityInterface } from './../interfaces/priority.interface';
+import { Game } from './../models/game';
+import { Team } from './../models/team';
+
+import { GameInterface } from './../interfaces/game.interface';
+import { TeamInterface } from './../interfaces/team.interface';
+
 
 export class PriorityList {
     static PRIORITIES_KEY = 'priorities';
@@ -21,6 +28,41 @@ export class PriorityList {
                 }
 
                 resolve(list);            
+            });
+        });
+    }
+
+    static allPriorities(gameIds: Array<Id>): Promise<Array<PriorityInterface>> {
+        return new Promise((resolve, _reject) => {
+            Promise.all([this.setInitialPriorities(), this.scorePriorities(gameIds)]).then((results) => {
+                let priorities = results[0];
+                let priority;
+
+                results[1].forEach((team) => {
+                    priority = priorities.length + 1;
+                    priorities.push({ val: team, priority })
+                });
+
+                resolve(priorities);
+            });
+        });
+    }
+
+    static scorePriorities(gameIds: Array<Id>): Promise<any> {
+        return Game.find(gameIds).then((games) => {
+            const priorityGames = games.map((game) => {
+                game = new Game(game);
+                return game;
+            });
+
+            return Promise.all(priorityGames.filter((priorityGame) => {
+                return priorityGame.isBlackedOut();
+            })).then((filtered) => {
+                let games = [];
+                filtered.forEach((filter, i) => {
+                    if (filter) { games.push(priorityGames[i].teamOne); }
+                })
+                return games;
             });
         });
     }
@@ -52,7 +94,7 @@ export class PriorityList {
 
         this.priorityArr = arr;
     }
-    
+
     buildList(): void {
         this.priorityArr.forEach((el) => {
             if (this.lastNode()) {
