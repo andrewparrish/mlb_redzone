@@ -58,7 +58,6 @@ export class GameCheckerService {
     private checkForGameChange(gameId: Id): void {
         Game.findById(gameId).then((game) => {
             this.mlbService.getCurrentGameIds().then((ids) => {
-                console.log('ids', ids);
                 const gameChanger = new GameChangerService(gameId, ids);
                 gameChanger.getNextPriority().then((next) => {
                     console.log('CHANGE TO', next);

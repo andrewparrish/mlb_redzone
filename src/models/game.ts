@@ -53,7 +53,7 @@ export class Game extends SavableModel {
             id: this.id,
             teamOne: this.teamOne,
             teamTwo: this.teamTwo,
-            lastUpdated: this.lastUpdated,
+            lastUpdated: this.lastUpdated || new Date(),
             link: this.link
         }
     }

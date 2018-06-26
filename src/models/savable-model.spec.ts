@@ -10,7 +10,7 @@ describe('SavableModel', () => {
 
     describe('save', () => {
        it('calls chrome local storage', () => {
-           model.save((result) => {
+           model.save('1', (result) => {
                expect(result).not.toBeNull();
            });
        });

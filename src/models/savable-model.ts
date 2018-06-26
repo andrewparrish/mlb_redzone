@@ -17,7 +17,7 @@ export class SavableModel {
         const uniqueId = this.uniqueId(id);
         const model = this.klass();
         return new Promise((resolve, _reject) => {
-            chrome.storage.local.get(uniqueId, (result) => {
+            chrome.storage.local.get([uniqueId], (result) => {
                 let data = result[uniqueId];
                 if (data) {
                     resolve(new model(data));
@@ -44,7 +44,8 @@ export class SavableModel {
         return this;
     }
 
-    save(afterSave = null): void {
-        chrome.storage.local.set(this.asHash(), afterSave);
+    save(uniqueId, afterSave = null): void {
+        const data = { [uniqueId]: this.asHash() };
+        chrome.storage.local.set(data, afterSave);
     }
 }
