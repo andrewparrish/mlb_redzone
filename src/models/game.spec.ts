@@ -1,5 +1,6 @@
 import { Game } from './game';
 import { GameInterface } from '../interfaces/game.interface';
+import { gameFactory } from '../interfaces/factories/game.factory';
 import { teamFactory } from '../interfaces/factories/team.factory';
 import * as testChrome from 'sinon-chrome';
 import { Team } from './team';
@@ -108,5 +109,27 @@ describe('Game', () => {
         it('identifies a game is not in commercial break', () => {
             expect(nonCommercialBreakGame.isInCommercialBreak()).toBeFalsy();
         });
+    });
+
+    describe('#inningsRemaining', () => {
+        const unstartedGame = new Game(gameFactory());
+        const midGame = new Game(gameFactory({ inning: 3 }));
+        const extraInningGame = new Game(gameFactory({ inning: 11 }));
+
+        it('is 9 when unstarted', () => {
+            expect(unstartedGame.remainingInnings).toEqual(9); 
+        });      
+        
+        it('is 6 after 3 innings', () => {
+            expect(midGame.remainingInnings).toEqual(6);
+        });
+
+        it('is negative in extra innings', () => {
+            expect(extraInningGame.remainingInnings).toEqual(-2);
+        });
+    });
+
+    describe('#gameScore', () => {
+        
     });
 });

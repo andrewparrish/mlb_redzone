@@ -15,18 +15,14 @@ export class GameChangerService {
     getNextPriority(): Promise<Game> {
         return new Promise((resolve, _reject) => {
             Game.find(this.gameIds).then((games) => {
-                console.log('games', games);
                 const gameHash = this.forGameHash(games);
                 // TODO: Ignore current game
                 PriorityList.allPriorities(this.gameIds).then((priorities) => {
-                    console.log('games', gameHash);
-                    console.log('prioriteis', priorities);
                     for(let i = 0; i < priorities.length; i++) {
                         let game = gameHash[priorities[i].val];
                         if (game && !game.isInCommercialBreak() && priorities[i].val !== this.currGameId) {
-                            gameHash[priorities[i].val].isBlackedOut().then(function(blackout) {
-                                console.log('change to?', gameHash);
-                                if(!blackout) { return gameHash[priorities[i].val]; }
+                            gameHash[priorities[i].val].isBlackedOut().then((blackout) => {
+                                if(!blackout) { resolve(gameHash[priorities[i].val]); }
                             });
                         }
                     }

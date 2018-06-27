@@ -8,4 +8,7 @@ export interface GameInterface {
     lastUpdated: string | Date;
     link: string;
     alerts?: Array<any>;
+    teamOneScore?: number;
+    teamTwoScore?: number;
+    inning?: number;
 }

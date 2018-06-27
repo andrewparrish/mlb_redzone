@@ -60,7 +60,6 @@ export class GameCheckerService {
             this.mlbService.getCurrentGameIds().then((ids) => {
                 const gameChanger = new GameChangerService(gameId, ids);
                 gameChanger.getNextPriority().then((next) => {
-                    console.log('CHANGE TO', next);
                     this.mlbService.changeGame(next.id);
                 });
             });

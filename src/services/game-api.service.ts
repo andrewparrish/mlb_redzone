@@ -45,6 +45,7 @@ export class GameApiService extends BaseApiService {
         this.getGameSpecificData(gameData).then((specificData) => {
             gameData.alerts = specificData.gameData.alerts;
             const game = new Game(gameData);
+            if (!(typeof afterSave === "function")) { afterSave = null; }
             game.save(Game.uniqueId(game.id), afterSave);
         });
     }

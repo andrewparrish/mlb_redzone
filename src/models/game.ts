@@ -10,6 +10,9 @@ export class Game extends SavableModel {
     link: string;
     lastUpdated: Date | string;
     alerts = [];
+    teamOneScore: number = 0;
+    teamTwoScore: number = 0;
+    inning: number = 0;
 
     COMMERCIAL_STATUSES = ["end_of_half_inning"];
 
@@ -22,10 +25,14 @@ export class Game extends SavableModel {
         return 'game';
     }
 
+    get remainingInnings(): number {
+        return 9 - this.inning;
+    }
+
     isBlackedOut(): Promise<boolean> {
         return new Promise((resolve, reject) => {
             this.getTeams().then((teams) => {
-                const blackedOut = teams.find((team) => {
+                const blackedOut = teams.filter(team => team).find((team) => {
                    return team.blackout; 
                 });
 
