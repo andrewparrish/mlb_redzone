@@ -49,20 +49,21 @@ export class GameCheckerService {
         this.mlbService.getCurrentGameId().then((gameId) => {
             Game.find(gameId).then((game) => {
                 this.apiService.mergeGameData(game, () => {
-                    this.checkForGameChange(gameId);
+                    console.log('game', game);
+                    console.log('gameincommercial', game.isInCommercialBreak());
+                    if (game.isInCommercialBreak()) { this.checkForGameChange(game) }
                 }); 
             });
         });
     }
 
-    private checkForGameChange(gameId: Id): void {
-        Game.findById(gameId).then((game) => {
-            this.mlbService.getCurrentGameIds().then((ids) => {
-                const gameChanger = new GameChangerService(gameId, ids);
-                gameChanger.getNextPriority().then((next) => {
-                    this.mlbService.changeGame(next.id);
-                });
+    private checkForGameChange(game: Game): void {
+        this.mlbService.getCurrentGameIds().then((ids) => {
+            const gameChanger = new GameChangerService(game.id, ids);
+            gameChanger.getNextPriority().then((next) => {
+                console.log('NEXT', next);
+                this.mlbService.changeGame(next.id);
             });
-        });         
+        });
     }
 }

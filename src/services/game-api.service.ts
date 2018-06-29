@@ -43,7 +43,11 @@ export class GameApiService extends BaseApiService {
 
     mergeGameData = (gameData: GameInterface, afterSave = null) => {
         this.getGameSpecificData(gameData).then((specificData) => {
+            gameData.alerts = specificData.liveData.linescore.currentInning;
+            gameData.teamOneScore = parseInt(specificData.liveData.linescore.away.runs);
+            gameData.teamTwoScore = parseInt(specificData.liveData.linescore.home.runs)
             gameData.alerts = specificData.gameData.alerts;
+            if (gameData.alerts.length > 0) { console.log(gameData.alerts) };
             const game = new Game(gameData);
             if (!(typeof afterSave === "function")) { afterSave = null; }
             game.save(Game.uniqueId(game.id), afterSave);

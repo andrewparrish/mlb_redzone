@@ -14,7 +14,7 @@ export class Game extends SavableModel {
     teamTwoScore: number = 0;
     inning: number = 0;
 
-    COMMERCIAL_STATUSES = ["end_of_half_inning"];
+    COMMERCIAL_STATUSES = ["end_of_half_inning", "pitcher_change", "game_over"];
 
     constructor(gameData: GameInterface) {
         super();

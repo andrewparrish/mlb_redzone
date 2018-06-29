@@ -20,7 +20,7 @@ export class GameChangerService {
                 PriorityList.allPriorities(this.gameIds).then((priorities) => {
                     for(let i = 0; i < priorities.length; i++) {
                         let game = gameHash[priorities[i].val];
-                        if (game && !game.isInCommercialBreak() && priorities[i].val !== this.currGameId) {
+                        if (game && !game.isInCommercialBreak() && priorities[i].val.toString() !== this.currGameId.toString()) {
                             gameHash[priorities[i].val].isBlackedOut().then((blackout) => {
                                 if(!blackout) { resolve(gameHash[priorities[i].val]); }
                             });
