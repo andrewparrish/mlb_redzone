@@ -5,12 +5,17 @@ import { GameCheckerService } from './services/game-checker.service';
 import { Team } from './models/team';
 
 $.getJSON("mappings/teams.json", (teams) => {
+    let allTeams = [];
     $.each(teams, (val, name) => {
         let blackout = false;
         if (val === "nym" || val === "nyy" ) { blackout = true; }
-        const team = new Team({ id: val, displayName: name, blackout });
+        let teamInfo = { id: val, displayName: name, blackout };
+        const team = new Team(teamInfo);
+        allTeams.push(teamInfo);
         team.save(Team.uniqueId(val));
     });  
+
+    Team.saveAllTeams(allTeams);
 });
 
 console.log('HEREEREERE');
