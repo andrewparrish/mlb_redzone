@@ -2,9 +2,9 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 import { Hello } from "./ui/hello";
-import { TeamDropdown } from './ui/components/team-dropdown';
+import { BlackoutTeams } from './ui/components/blackout-teams';
 
 ReactDOM.render(
-        <TeamDropdown />,
+        <BlackoutTeams />,
         document.getElementById("root") as HTMLElement
 );

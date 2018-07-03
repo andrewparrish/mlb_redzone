@@ -2,6 +2,10 @@ body {
     width: 300px;
 }
 
+.team__save {
+    display: inline;
+}
+
 .add-priority {
     display: flex;
     justify-content: flex-start;

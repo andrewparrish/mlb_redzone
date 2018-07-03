@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as $ from 'jquery';
 import { TeamInterface } from './../../interfaces/team.interface';
 import { Team } from './../../models/team';
 
@@ -11,7 +10,6 @@ export class TeamDropdown extends React.Component<{}, { teams: Array<TeamInterfa
 
     componentDidMount() {
         Team.getAllTeams().then((teams: Array<TeamInterface>) => {
-            console.log('TEAMS', teams);
             this.setState({ teams });
         });
     }
@@ -19,7 +17,7 @@ export class TeamDropdown extends React.Component<{}, { teams: Array<TeamInterfa
 
     teamOptions() {
         return this.state.teams.map((team) => {
-            return <option value={team.id}>{ team.displayName }</option>
+            return <option key={team.id} value={team.id}>{ team.displayName }</option>
         });
     }
 
